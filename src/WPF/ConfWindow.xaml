@@ -75,9 +75,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-            <TextBlock Name="ShowMpvNetSpecific"    Margin="0,15,0,0" Cursor="Hand" TextWrapping="WrapWithOverflow" Foreground="{Binding Theme.Heading}" MouseUp="ShowMpvNetSpecific_MouseUp">Show mpv.net specific options</TextBlock>
+            <TextBlock Name="ShowMpvNetSpecific"    Margin="0,15,0,0" Cursor="Hand" TextWrapping="WrapWithOverflow" Foreground="{Binding Theme.Heading}" MouseUp="ShowMpvNetSpecific_MouseUp">Exclusive options</TextBlock>
             <TextBlock Name="PreviewTextBlock"      Margin="0,15,0,0" Cursor="Hand" TextWrapping="WrapWithOverflow" Foreground="{Binding Theme.Heading}" MouseUp="PreviewTextBlock_MouseUp">Preview mpv.conf</TextBlock>
-            <TextBlock Name="ShowManualTextBlock"   Margin="0,15,0,0" Cursor="Hand" TextWrapping="WrapWithOverflow" Foreground="{Binding Theme.Heading}" MouseUp="ShowManualTextBlock_MouseUp">Show mpv manual</TextBlock>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,0 +1,1419 @@
+﻿msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: zh_CN\n"
+
+msgid "-"
+msgstr "-"
+
+msgid "(experimental) Win32, using WGL for rendering and Direct3D 9Ex for presentation. Works on Nvidia and AMD. Newer Intel chips with the latest drivers may also work."
+msgstr "（实验性）Win32，使用 WGL 进行渲染，使用 Direct3D 9Ex 进行呈现。可在 Nvidia 和 AMD 上工作。较新的 Intel 芯片搭配最新驱动程序也可能可以工作。"
+
+msgid "+10%"
+msgstr "+10%"
+
+msgid "<0-100> Set the JPEG quality level. Higher means better quality. The default is 90."
+msgstr "<0-100> 设置 JPEG 质量等级。数值越高画质越好。默认值为 90。"
+
+msgid "<0-32> In multi-monitor configurations (i.e. a single desktop that spans across multiple displays), this option tells mpv which screen to display the video on."
+msgstr "<0-32> 在多显示器配置中（即单个桌面横跨多个显示器），此选项指定 mpv 在哪个屏幕上显示视频。"
+
+msgid "<0-5> Set the filter applied prior to PNG compression. 0 is none, 1 is 'sub', 2 is 'up', 3 is 'average', 4 is 'Paeth', and 5 is 'mixed'. This affects the level of compression that can be achieved. For most images, 'mixed' achieves the best compression ratio, hence it is the default."
+msgstr "<0-5> 设置 PNG 压缩前应用的滤镜。0 为无，1 为 'sub'，2 为 'up'，3 为 'average'，4 为 'Paeth'，5 为 'mixed'。此选项影响可达到的压缩级别。对大多数图像而言，'mixed' 能达到最佳压缩比，因此它是默认值。"
+
+msgid "<0-9> Set the PNG compression level. Higher means better compression. This will affect the file size of the written screenshot file and the time it takes to write a screenshot. Too high compression might occupy enough CPU time to interrupt playback. The default is 7."
+msgstr "<0-9> 设置 PNG 压缩级别。数值越高压缩越好。这会影响写入的截图文件大小以及写入截图所需的时间。过高的压缩可能占用大量 CPU 时间，以致中断播放。默认值为 7。"
+
+msgid "<bytesize> Controls how much the demuxer is allowed to buffer ahead.\nSuffixes such as KiB and MiB are supported."
+msgstr "<bytesize> 控制允许解复用器向前缓冲的数据量。\n支持 KiB 和 MiB 等后缀。"
+
+msgid "<float >= 1> Hold-speed multiplier for hold-speed-key. Release restores previous speed. Set to 0 or 1 to disable. (mpv.net specific option)"
+msgstr "<浮点数 >= 1> 长按倍速倍率（配合 hold-speed-key）。松开恢复原倍速。设为 0 或 1 可关闭。（mpv.net 专用选项）"
+
+msgid "<float> Minimum aspect ratio of the window. Useful to force a wider window and therefore a larger OSC. (mpv.net specific option)"
+msgstr "<float> 窗口的最小宽高比。可用于强制更宽的窗口，从而获得更大的 OSC。（mpv.net 专用选项）"
+
+msgid "<int> Amount of recent files to be remembered. Default: 50 (mpv.net specific option)"
+msgstr "<int> 记住的最近文件数量。默认：50（mpv.net 专用选项）"
+
+msgid "<int> Initial window height in percent for audio files. Default: 70"
+msgstr "<int> 音频文件的初始窗口高度百分比。默认值：70"
+
+msgid "<int> Initial window height in percent for image files. Default: 80"
+msgstr "<int> 图片文件的初始窗口高度百分比。默认值：80"
+
+msgid "<int> Initial window height in percent. Default: 60"
+msgstr "<int> 初始窗口高度百分比。默认值：60"
+
+msgid "<int> Maximum window height in percent. Default: 80"
+msgstr "<int> 最大窗口高度百分比。默认值：80"
+
+msgid "<int> Minimum window height in percent. Default: 10"
+msgstr "<int> 最小窗口高度百分比。默认值：10"
+
+msgid "<N|inf|force|no> Loops playback N times. A value of 1 plays it one time (default), 2 two times, etc. inf means forever. no is the same as 1 and disables looping. If several files are specified on command line, the entire playlist is looped. The force mode is like inf, but does not skip playlist entries which have been marked as failing. This means the player might waste CPU time trying to loop a file that doesn't exist. But it might be useful for playing webradios under very bad network conditions."
+msgstr "<N|inf|force|no> 循环播放 N 次。值为 1 表示播放一次（默认），2 表示播放两次，依此类推。inf 表示永远循环。no 等同于 1，即禁用循环。如果在命令行中指定了多个文件，则循环整个播放列表。force 模式类似于 inf，但不会跳过被标记为失败的播放列表条目。这意味着播放器可能会浪费 CPU 时间去尝试循环一个不存在的文件。但在非常糟糕的网络条件下播放网络电台时，这可能很有用。"
+
+msgid "<N|inf|no> Loop a single file N times. inf means forever, no means normal playback.\n\nThe difference to loop-playlist is that this doesn't loop the playlist, just the file itself. If the playlist contains only a single file, the difference between the two option is that this option performs a seek on loop, instead of reloading the file. loop is an alias for this option."
+msgstr "<N|inf|no> 循环单个文件 N 次。inf 表示永远循环，no 表示正常播放。\n\n与 loop-playlist 的区别在于：此选项不循环播放列表，只循环文件本身。如果播放列表只包含单个文件，两者的区别是此选项在循环时执行一次跳转（seek），而不是重新加载文件。loop 是此选项的别名。"
+
+msgid "<name> Use the given audio device. This consists of the audio output name, e.g. alsa, followed by /, followed by the audio output specific device name. The default value for this option is auto, which tries every audio output in preference order with the default device.\nAvailable devices can be found in the context menu under:\nView > Advanced > Show Audio Devices"
+msgstr "<name> 使用指定的音频设备。由音频输出名称（如 alsa）+ / + 该音频输出特定的设备名称组成。此选项默认值为 auto，即按优先顺序依次以默认设备尝试每个音频输出。\n可用设备可在右键菜单的以下位置查看：\n工具 > 输出文本 > 音频设备列表"
+
+msgid "-10%"
+msgstr "-10%"
+
+msgid "100 %"
+msgstr "100%"
+
+msgid "200 %"
+msgstr "200%"
+
+msgid "300 %"
+msgstr "300%"
+
+msgid "50 %"
+msgstr "50%"
+
+msgid "A slightly sharpened version of ewa_lanczos, preconfigured to use an ideal radius and parameter. If your hardware can run it, this is probably what you should use by default."
+msgstr "ewa_lanczos 的轻微锐化版本，预先配置为使用理想的半径和参数。如果你的硬件能够运行它，这可能是你应该默认使用的。"
+
+msgid "A version of nearest neighbour that (naively) oversamples pixels, so that pixels overlapping edges get linearly interpolated instead of rounded. This essentially removes the small imperfections and judder artifacts caused by nearest-neighbour interpolation, in exchange for adding some blur. This filter is good at temporal interpolation, and also known as \"smoothmotion\" (see tscale)."
+msgstr "最近邻插值的一个版本，（简单地）对像素进行过采样，使与边缘重叠的像素按线性插值处理而不是取整。这基本上消除了最近邻插值造成的小瑕疵和抖动伪影，代价是增加一些模糊。此滤镜擅长时间插值，也被称为 \"smoothmotion\"（参见 tscale）。"
+
+msgid "About mpv.net"
+msgstr "关于"
+
+msgid "Add files to playlist..."
+msgstr "添加到当前列表"
+
+msgid "Advanced"
+msgstr "高级"
+
+msgid "Allow only gpu-context=d3d11"
+msgstr "仅允许 gpu-context=d3d11"
+
+msgid "Allow only OpenGL (requires OpenGL 2.1+ or GLES 2.0+)"
+msgstr "仅允许 OpenGL（需要 OpenGL 2.1+ 或 GLES 2.0+）"
+
+msgid "Allow only Vulkan"
+msgstr "仅允许 Vulkan"
+
+msgid "Always save the current playback position on quit. When this file is played again later, the player will seek to the old playback position on start. This does not happen if playback of a file is stopped in any other way than quitting. For example, going to the next file in the playlist will not save the position, and start playback at beginning the next time the file is played.\n\nThis behavior is disabled by default, but is always available when quitting the player with Shift+Q."
+msgstr "退出时总是保存当前播放位置。以后再次播放此文件时，播放器将在开始时跳转到上次的播放位置。如果播放以退出以外的任何方式停止，则不会保存位置。例如，转到播放列表中的下一个文件不会保存位置，下次播放该文件时将从头开始播放。\n\n此行为默认禁用，但在使用 Shift+Q 退出播放器时始终可用。"
+
+msgid "always use software decoding"
+msgstr "总是使用软件解码"
+
+msgid "As scale, but for interpolating chroma information. If the image is not subsampled, this option is ignored entirely."
+msgstr "与 scale 相同，但用于插值色度信息。如果图像没有经过子采样，此选项将被完全忽略。"
+
+msgid "Audio"
+msgstr "音频"
+
+msgid "Audio > -"
+msgstr "音频 > -"
+
+msgid "Audio > Cycle/Next"
+msgstr "音频 > 切换 音频轨"
+
+msgid "Audio > Delay +0.1"
+msgstr "音频 > 延迟 +0.1"
+
+msgid "Audio > Delay -0.1"
+msgstr "音频 > 延迟 -0.1"
+
+msgid "Audio file extensions used to create file associations and used by the auto-load-folder feature. (mpv.net specific option)"
+msgstr "用于创建文件关联并被自动加载文件夹功能使用的音频文件扩展名。（mpv.net 专用选项）"
+
+msgid "Automatic selection. If output bit depth cannot be detected, 8 bits per component are assumed."
+msgstr "自动选择。如果无法检测输出位深，则假定为每分量 8 位。"
+
+msgid "auto-select"
+msgstr "自动选择"
+
+msgid "Available on Windows 10 or higher"
+msgstr "在 Windows 10 或更高版本上可用"
+
+msgid "Bilinear hardware texture filtering (fastest, very low quality)."
+msgstr "双线性硬件纹理过滤（最快，质量非常低）。"
+
+msgid "Bottom"
+msgstr "底部"
+
+msgid "By default, when using hardware decoding with --gpu-api=d3d11, the video image will be copied (GPU-to-GPU) from the decoder surface to a shader resource. Set this option to avoid that copy by sampling directly from the decoder image. This may increase performance and reduce power usage, but can cause the image to be sampled incorrectly on the bottom and right edges due to padding, and may invoke driver bugs, since Direct3D 11 technically does not allow sampling from a decoder surface (though most drivers support it.)"
+msgstr "默认情况下，使用 --gpu-api=d3d11 进行硬件解码时，视频图像会从解码器表面（GPU 到 GPU）复制到着色器资源。设置此选项可直接从解码器图像采样，从而避免该复制。这可能提升性能并降低功耗，但由于边缘填充（padding），可能导致图像底部和右侧边缘采样不正确，还可能引发驱动程序 bug，因为 Direct3D 11 在技术上不允许从解码器表面采样（尽管大多数驱动程序支持）。"
+
+msgid "Cache"
+msgstr "缓存"
+
+msgid "Center"
+msgstr "居中"
+
+msgid "Changes between a light and dark theme.\nmpv.net must be restarted after a change.\nmpv.net specific option."
+msgstr "在浅色与深色主题之间切换。\n更改后必须重启 mpv.net。\nmpv.net 专用选项。"
+
+msgid "Chapters"
+msgstr "章节"
+
+msgid "Chinese (Simplified)"
+msgstr "简体中文"
+
+msgid "Clear file associations (requires admin)"
+msgstr "取消关联"
+
+msgid "Color theme used in dark mode.\nmpv.net must be restarted after a change.\nmpv.net specific option. Default: dark"
+msgstr "深色模式下使用的颜色主题。\n更改后必须重启 mpv.net。\nmpv.net 专用选项。默认值：dark"
+
+msgid "Color theme used in light mode.\nmpv.net must be restarted after a change.\nmpv.net specific option. Default: light"
+msgstr "浅色模式下使用的颜色主题。\n更改后必须重启 mpv.net。\nmpv.net 专用选项。默认值：light"
+
+msgid "Command Palette"
+msgstr "命令面板"
+
+msgid "Compute the HDR peak and frame average brightness per-frame instead of relying on tagged metadata. These values are averaged over local regions as well as over several frames to prevent the value from jittering around too much. This option basically gives you dynamic, per-scene tone mapping. Requires compute shaders, which is a fairly recent OpenGL feature, and will probably also perform horribly on some drivers, so enable at your own risk. The special value auto (default) will enable HDR peak computation automatically if compute shaders and SSBOs are supported."
+msgstr "逐帧计算 HDR 峰值和帧平均亮度，而不是依赖标记的元数据。这些值会在局部区域以及多帧之间取平均，以防止数值过度抖动。此选项基本上可提供动态的逐场景色调映射。需要计算着色器（compute shaders），这是一个较新的 OpenGL 特性，并且在某些驱动程序上可能表现极差，因此请自担风险地启用。特殊值 auto（默认）会在支持计算着色器和 SSBO 时自动启用 HDR 峰值计算。"
+
+msgid "Config Editor"
+msgstr "配置编辑器"
+
+msgid "Continue last playback: when started without a file, open the most recent media from history. (mpv.net specific option)"
+msgstr "继续上次播放：无文件启动时，自动打开最近播放的媒体。（mpv.net 专用选项）"
+
+msgid "Controls which type of graphics APIs will be accepted. Auto uses d3d11, it should only be changed in case of problems, Vulkan is not recommended."
+msgstr "控制接受哪种类型的图形 API。auto 使用 d3d11，只应在出现问题时更改，不推荐使用 Vulkan。"
+
+msgid "copies video back to system RAM (Any platform CUDA is available)"
+msgstr "将视频复制回系统 RAM（任何支持 CUDA 的平台）"
+
+msgid "copies video back to system RAM (Windows 8+ only)"
+msgstr "将视频复制回系统 RAM（仅限 Windows 8+）"
+
+msgid "copies video back to system RAM (Windows only)"
+msgstr "将视频复制回系统 RAM（仅限 Windows）"
+
+msgid "Create a new process everytime the shell starts mpv.net"
+msgstr "每次 shell 启动 mpv.net 时都创建新进程"
+
+msgid "Cycle Aspect Ratio"
+msgstr "切换宽高比"
+
+msgid "Cycle/Next"
+msgstr "切换"
+
+msgid "Decide whether to use network cache settings."
+msgstr "决定是否使用网络缓存设置。"
+
+msgid "Decrease Brightness"
+msgstr "亮度 -1"
+
+msgid "Decrease Contrast"
+msgstr "对比度 -1"
+
+msgid "Decrease Gamma"
+msgstr "伽马 -1"
+
+msgid "Decrease Height"
+msgstr "减小高度"
+
+msgid "Decrease Saturation"
+msgstr "饱和度 -1"
+
+msgid "Decrease Size"
+msgstr "缩小"
+
+msgid "Decrease Subtitle Font Size"
+msgstr "字号 -0.1"
+
+msgid "Default"
+msgstr "默认"
+
+msgid "Defines if more then one mpv.net process is allowed. (mpv.net specific option)\n\nMulti can alternatively be enabled by pressing the SHIFT key.\n\nWhenever the control key is pressed when files or URLs are opened, the playlist is not cleared but the files or URLs are appended to the playlist. This not only works on process startup but in all mpv.net features that open files and URLs."
+msgstr "定义是否允许运行多个 mpv.net 进程。（mpv.net 专用选项）\n\n也可以通过按住 SHIFT 键来启用 Multi 模式。\n\n只要在打开文件或 URL 时按住 Ctrl 键，播放列表就不会被清空，而是将文件或 URL 追加到播放列表。这不仅适用于进程启动时，也适用于 mpv.net 中所有打开文件和 URL 的功能。"
+
+msgid "Delay +0.1"
+msgstr "延迟 +0.1"
+
+msgid "Delay -0.1"
+msgstr "延迟 -0.1"
+
+msgid "Delay in milliseconds before we start to autorepeat a key (0 to disable)."
+msgstr "开始自动重复按键前的延迟毫秒数（0 为禁用）。"
+
+msgid "Demuxer"
+msgstr "解复用"
+
+msgid "Direct3D11 through the OpenGL ES translation layer ANGLE. This supports almost everything the win backend does (if the ANGLE build is new enough)."
+msgstr "通过 OpenGL ES 转换层 ANGLE 实现的 Direct3D11。支持 win 后端所支持的几乎所有功能（前提是 ANGLE 构建足够新）。"
+
+msgid "Disable any dithering done by mpv."
+msgstr "禁用 mpv 执行的任何抖动（dithering）。"
+
+msgid "Dither to 10 bit output."
+msgstr "抖动到 10 位输出。"
+
+msgid "Dither to 8 bit output."
+msgstr "抖动到 8 位输出。"
+
+msgid "Don't automatically load external audio files."
+msgstr "不自动加载外部音频文件。"
+
+msgid "Don't automatically load external subtitle files."
+msgstr "不自动加载外部字幕文件。"
+
+msgid "Double"
+msgstr "两倍"
+
+msgid "Down"
+msgstr "下"
+
+msgid "Draws the blue mpv.net logo ontop of the native OSC logo."
+msgstr "在原生 OSC 标志上绘制蓝色的 mpv.net 标志。"
+
+msgid "Draws the blue mpv.net logo with a santa hat in december, the option is called greenandgrumpy in mpv."
+msgstr "在十二月为蓝色的 mpv.net 标志戴上圣诞帽，该选项在 mpv 中名为 greenandgrumpy。"
+
+msgid "Elliptic weighted average Lanczos scaling. Also known as Jinc. Relatively slow, but very good quality. The radius can be controlled with scale-radius. Increasing the radius makes the filter sharper but adds more ringing. (This filter is an alias for jinc-windowed jinc)"
+msgstr "椭圆加权平均 Lanczos 缩放。也称为 Jinc。相对较慢，但质量非常好。半径可通过 scale-radius 控制。增大半径会使滤镜更锐利，但会增加振铃。（此滤镜是 jinc 窗化的 jinc 的别名）"
+
+msgid "enable any whitelisted hw decoder"
+msgstr "启用白名单中的任何硬件解码器"
+
+msgid "enable best hw decoder"
+msgstr "启用最佳硬件解码器"
+
+msgid "enable best hw decoder with copy-back"
+msgstr "启用带回拷贝（copy-back）的最佳硬件解码器"
+
+msgid "Enable the debanding algorithm. This greatly reduces the amount of visible banding, blocking and other quantization artifacts, at the expense of very slightly blurring some of the finest details. In practice, it's virtually always an improvement - the only reason to disable it would be for performance."
+msgstr "启用去色带（debanding）算法。这能大大减少可见的色带、色块和其他量化伪影，代价是极轻微地模糊一些最细微的细节。实际上它几乎总能带来改善——禁用它的唯一理由是性能。"
+
+msgid "Enable the default track auto-selection. Enabling this will make the player select streams according to aid, alang, and others. If it is disabled, no tracks are selected. In addition, the player will not exit if no tracks are selected, and wait instead (this wait mode is similar to pausing, but the pause option is not set).\n\nThis is useful with lavfi-complex: you can start playback in this mode, and then set select tracks at runtime by setting the filter graph. Note that if lavfi-complex is set before playback is started, the referenced tracks are always selected."
+msgstr "启用默认的轨道自动选择。启用后，播放器将根据 aid、alang 等选项选择流。如果禁用，则不选择任何轨道。此外，如果没有选择任何轨道，播放器不会退出，而是等待（此等待模式类似于暂停，但不会设置 pause 选项）。\n\n这在配合 lavfi-complex 时很有用：你可以在此模式下开始播放，然后通过设置滤镜图在运行时选择轨道。注意，如果在播放开始前已设置 lavfi-complex，则被引用的轨道总是会被选择。"
+
+msgid "Enable this only when a developer asks for it. (mpv.net specific option)"
+msgstr "仅在开发者要求时才启用。（mpv.net 专用选项）"
+
+msgid "English"
+msgstr "英语"
+
+msgid "Enlarge"
+msgstr "递增"
+
+msgid "exactly the same as auto"
+msgstr "与 auto 完全相同"
+
+msgid "Exit"
+msgstr "退出"
+
+msgid "Exit mpv.net"
+msgstr "退出"
+
+msgid "Exit Watch Later"
+msgstr "退出稍后观看"
+
+msgid "Experimental video renderer based on libplacebo. This supports almost the same set of features as --vo=gpu."
+msgstr "基于 libplacebo 的实验性视频渲染器。支持与 --vo=gpu 几乎相同的功能集。"
+
+msgid "File"
+msgstr "文件"
+
+msgid "Find a setting"
+msgstr "查找设置"
+
+msgid "First File"
+msgstr "首位文件"
+
+msgid "For single files automatically load the entire directory into the playlist. Can be suppressed via shift key. (mpv.net specific option)"
+msgstr "对单个文件自动将整个目录加载到播放列表。可通过按住 Shift 键跳过。（mpv.net 专用选项）"
+
+msgid "Force a single process and add files to playlist"
+msgstr "强制单进程并将文件添加到播放列表"
+
+msgid "Force a single process everytime the shell starts mpv.net"
+msgstr "每次 shell 启动 mpv.net 时都强制使用单进程"
+
+msgid "General"
+msgstr "常规"
+
+msgid "General purpose, customizable, GPU-accelerated video output driver. It supports extended scaling methods, dithering, color management, custom shaders, HDR, and more."
+msgstr "通用、可自定义、GPU 加速的视频输出驱动。支持扩展的缩放方法、抖动、色彩管理、自定义着色器、HDR 等。"
+
+msgid "Half"
+msgstr "一半"
+
+msgid "Help"
+msgstr "帮助"
+
+msgid "Help > -"
+msgstr "帮助 > -"
+
+msgid "Help > About mpv.net"
+msgstr "帮助 > 关于"
+
+msgid "Help > Manual mpv"
+msgstr "帮助 > mpv 手册"
+
+msgid "Help > Manual mpv.net"
+msgstr "帮助 > mpv.net 手册"
+
+msgid "Help > Website mpv"
+msgstr "帮助 > mpv 网站"
+
+msgid "Help > Website mpv.net"
+msgstr "帮助 > mpv.net 网站"
+
+msgid "History"
+msgstr "播放历史"
+
+msgid "How the player synchronizes audio and video.\n\nFor more information visit:"
+msgstr "播放器如何同步音频和视频。\n\n更多信息请访问："
+
+msgid "If possible, write screenshots with a bit depth similar to the source video. This is interesting in particular for PNG, as this sometimes triggers writing 16 bit PNGs with huge file sizes. This will also include an unused alpha channel in the resulting files if 16 bit is used."
+msgstr "如果可能，以与源视频相近的位深写入截图。这对 PNG 尤其有意义，因为这有时会触发写入文件体积巨大的 16 位 PNG。如果使用 16 位，结果文件中还会包含一个未使用的 alpha 通道。"
+
+msgid "If set to no and keep-open is also set to no, the player exits after the last file ends."
+msgstr "如果设为 no 且 keep-open 也设为 no，播放器将在最后一个文件结束后退出。"
+
+msgid "If set to no, instead of pausing when keep-open is active, just stop at end of file and continue playing forward when you seek backwards until end where it stops again."
+msgstr "如果设为 no，当 keep-open 生效时不再暂停，而是在文件末尾停止；向后跳转后会继续向前播放，直到再次到达文件末尾时停止。"
+
+msgid "If the current file ends, go to the next file, keep the last file open."
+msgstr "当前文件结束后，转到下一个文件，最后一个文件保持打开。"
+
+msgid "If the current file ends, go to the next file. If idle is set to no, the player exits after the last file."
+msgstr "当前文件结束后，转到下一个文件。如果 idle 设为 no，播放器将在最后一个文件结束后退出。"
+
+msgid "Image file extensions used to create file associations and used by the auto-load-folder feature. (mpv.net specific option)"
+msgstr "用于创建文件关联并被自动加载文件夹功能使用的图片文件扩展名。（mpv.net 专用选项）"
+
+msgid "Increase Brightness"
+msgstr "亮度 +1"
+
+msgid "Increase Contrast"
+msgstr "对比度 +1"
+
+msgid "Increase Gamma"
+msgstr "伽马 +1"
+
+msgid "Increase Height"
+msgstr "增大高度"
+
+msgid "Increase Saturation"
+msgstr "饱和度 +1"
+
+msgid "Increase Size"
+msgstr "放大"
+
+msgid "Increase Subtitle Font Size"
+msgstr "字号 +0.1"
+
+msgid "Input"
+msgstr "输入"
+
+msgid "Jump 30 sec backward"
+msgstr "后退 30 秒"
+
+msgid "Jump 30 sec forward"
+msgstr "前进 30 秒"
+
+msgid "Jump 5 min backward"
+msgstr "后退 5 分钟"
+
+msgid "Jump 5 min forward"
+msgstr "前进 5 分钟"
+
+msgid "Jump 5 sec backward"
+msgstr "后退 5 秒"
+
+msgid "Jump 5 sec forward"
+msgstr "前进 5 秒"
+
+msgid "Jump Next Frame"
+msgstr "下一帧"
+
+msgid "Jump Previous Frame"
+msgstr "上一帧"
+
+msgid "keepaspect-window will lock the window size to the video aspect. Default: yes"
+msgstr "keepaspect-window 会将窗口尺寸锁定为视频宽高比。默认值：yes"
+
+msgid "Lanczos scaling. Provides mid quality and speed. Generally worse than spline36, but it results in a slightly sharper image which is good for some content types. The number of taps can be controlled with  scale-radius, but is best left unchanged. (This filter is an alias for sinc-windowed sinc)"
+msgstr "Lanczos 缩放。提供中等的质量和速度。通常不如 spline36，但图像略锐一些，适合某些内容类型。抽头数可通过 scale-radius 控制，但最好保持不变。（此滤镜是 sinc 窗化的 sinc 的别名）"
+
+msgid "Last File"
+msgstr "末位文件"
+
+msgid "Left"
+msgstr "左侧"
+
+msgid "Like scale, but apply these filters on downscaling instead. \nIf no option is selected, it will keep the same with the upscaler."
+msgstr "与 scale 类似，但这些滤镜应用于缩小而不是放大。\n如果未选择任何选项，将与放大滤镜保持一致。"
+
+msgid "Load additional audio files matching the video filename. The parameter specifies how external audio files are matched."
+msgstr "加载与视频文件名匹配的附加音频文件。参数指定外部音频文件的匹配方式。"
+
+msgid "Load additional subtitle files matching the video filename. The parameter specifies how external subtitle files are matched. exact is enabled by default."
+msgstr "加载与视频文件名匹配的附加字幕文件。参数指定外部字幕文件的匹配方式。默认启用 exact。"
+
+msgid "Load all audio files containing media filename."
+msgstr "加载所有包含媒体文件名的音频文件。"
+
+msgid "Load all audio files in the current and audio-file-paths directories."
+msgstr "加载当前目录和 audio-file-paths 目录中的所有音频文件。"
+
+msgid "Load all subs containing media filename."
+msgstr "加载所有包含媒体文件名的字幕。"
+
+msgid "Load all subs in the current and sub-file-paths directories."
+msgstr "加载当前目录和 sub-file-paths 目录中的所有字幕。"
+
+msgid "Load external audio files..."
+msgstr "其它音轨"
+
+msgid "Load external subtitle files..."
+msgstr "其它字幕"
+
+msgid "Load the media filename with audio file extension."
+msgstr "加载带音频文件扩展名的媒体文件名。"
+
+msgid "Load the media filename with subtitle file extension."
+msgstr "加载带字幕文件扩展名的媒体文件名。"
+
+msgid "Manual mpv"
+msgstr "mpv 手册"
+
+msgid "Manual mpv.net"
+msgstr "mpv.net 手册"
+
+msgid "Mid quality and speed. This is the default when using gpu-hq."
+msgstr "中等的质量和速度。这是使用 gpu-hq 时的默认值。"
+
+msgid "Mitchell-Netravali. The B and C parameters can be set with  scale-param1 and scale-param2. This filter is very good at downscaling (see dscale)."
+msgstr "Mitchell-Netravali。B 和 C 参数可通过 scale-param1 和 scale-param2 设置。此滤镜非常适合缩小（参见 dscale）。"
+
+msgid "Mitchell-Netravali. The B and C parameters can be set with scale-param1 and scale-param2. This filter is very good at downscaling (see dscale)."
+msgstr "Mitchell-Netravali。B 和 C 参数可通过 scale-param1 和 scale-param2 设置。此滤镜非常适合缩小（参见 dscale）。"
+
+msgid "Move"
+msgstr "窗口移动"
+
+msgid "Move Down"
+msgstr "下移"
+
+msgid "Move Left"
+msgstr "左移"
+
+msgid "Move Right"
+msgstr "右移"
+
+msgid "Move Up"
+msgstr "上移"
+
+msgid "Mute"
+msgstr "开/关 静音"
+
+msgid "Navigate"
+msgstr "导航"
+
+msgid "Navigate > -"
+msgstr "导航 > -"
+
+msgid "Navigate > Chapters"
+msgstr "导航 > 章节"
+
+msgid "Navigate > First File"
+msgstr "导航 > 首位文件"
+
+msgid "Navigate > Jump 30 sec backward"
+msgstr "导航 > 后退 30 秒"
+
+msgid "Navigate > Jump 30 sec forward"
+msgstr "导航 > 前进 30 秒"
+
+msgid "Navigate > Jump 5 min backward"
+msgstr "导航 > 后退 5 分钟"
+
+msgid "Navigate > Jump 5 min forward"
+msgstr "导航 > 前进 5 分钟"
+
+msgid "Navigate > Jump 5 sec backward"
+msgstr "导航 > 后退 5 秒"
+
+msgid "Navigate > Jump 5 sec forward"
+msgstr "导航 > 前进 5 秒"
+
+msgid "Navigate > Jump Next Frame"
+msgstr "导航 > 下一帧"
+
+msgid "Navigate > Jump Previous Frame"
+msgstr "导航 > 上一帧"
+
+msgid "Navigate > Last File"
+msgstr "导航 > 末位文件"
+
+msgid "Navigate > Next Chapter"
+msgstr "导航 > 下一章节"
+
+msgid "Navigate > Next File"
+msgstr "导航 > 下个文件"
+
+msgid "Navigate > Previous Chapter"
+msgstr "导航 > 上一章节"
+
+msgid "Navigate > Previous File"
+msgstr "导航 > 上个文件"
+
+msgid "Navigate > Random File"
+msgstr "导航 > 随机跳转文件"
+
+msgid "Navigate > Titles"
+msgstr "导航 > 标题"
+
+msgid "Network"
+msgstr "网络"
+
+msgid "Never use precise seeks."
+msgstr "从不使用精确跳转。"
+
+msgid "Next Chapter"
+msgstr "下一章节"
+
+msgid "Next File"
+msgstr "下个文件"
+
+msgid "Number of key presses to generate per second on autorepeat."
+msgstr "自动重复时每秒生成的按键次数。"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Open > -"
+msgstr "打开 > -"
+
+msgid "Open > Add files to playlist..."
+msgstr "列表 > 添加到当前列表"
+
+msgid "Open > Load external audio files..."
+msgstr "打开 > 其它音轨"
+
+msgid "Open > Load external subtitle files..."
+msgstr "打开 > 其它字幕"
+
+msgid "Open > Open DVD/Blu-ray Drive/Folder..."
+msgstr "打开 > 光盘目录"
+
+msgid "Open > Open Files..."
+msgstr "打开 > 打开文件..."
+
+msgid "Open > Open URL or file from clipboard"
+msgstr "打开 > 剪贴板地址"
+
+msgid "Open > Recent"
+msgstr "打开 > 最近播放列表"
+
+msgid "Open Config Folder"
+msgstr "打开配置目录"
+
+msgid "Open DVD/Blu-ray Drive/Folder..."
+msgstr "光盘目录"
+
+msgid "Open Files..."
+msgstr "打开文件..."
+
+msgid "Open URL or file from clipboard"
+msgstr "剪贴板地址"
+
+msgid "OSC"
+msgstr "OSC"
+
+msgid "Pan & Scan"
+msgstr "画面"
+
+msgid "Pan & Scan > -"
+msgstr "画面 > -"
+
+msgid "Pan & Scan > Decrease Height"
+msgstr "画面 > 减小高度"
+
+msgid "Pan & Scan > Decrease Size"
+msgstr "画面 > 缩小"
+
+msgid "Pan & Scan > Increase Height"
+msgstr "画面 > 增加高度"
+
+msgid "Pan & Scan > Increase Size"
+msgstr "画面 > 放大"
+
+msgid "Pan & Scan > Move Down"
+msgstr "画面 > 下移"
+
+msgid "Pan & Scan > Move Left"
+msgstr "画面 > 左移"
+
+msgid "Pan & Scan > Move Right"
+msgstr "画面 > 右移"
+
+msgid "Pan & Scan > Move Up"
+msgstr "画面 > 上移"
+
+msgid "Pan & Scan > Reset"
+msgstr "画面 > 重置"
+
+msgid "Play"
+msgstr "播放"
+
+msgid "Play/Pause"
+msgstr "播放/暂停"
+
+msgid "Playback"
+msgstr "播放"
+
+msgid "Playback will never automatically advance to the next file."
+msgstr "播放永远不会自动前进到下一个文件。"
+
+msgid "Playlist"
+msgstr "列表"
+
+msgid "Preview mpv.conf"
+msgstr "预览 mpv.conf"
+
+msgid "Previous Chapter"
+msgstr "上一章节"
+
+msgid "Previous File"
+msgstr "上个文件"
+
+msgid "Profile"
+msgstr "配置档"
+
+msgid "Random File"
+msgstr "随机跳转文件"
+
+msgid "Recent"
+msgstr "最近播放列表"
+
+msgid "Register audio file associations"
+msgstr "关联音频"
+
+msgid "Register file associations (requires admin)"
+msgstr "完全关联"
+
+msgid "Register image file associations"
+msgstr "关联图片"
+
+msgid "Register video file associations"
+msgstr "关联视频"
+
+msgid "requires vo=gpu (Any platform CUDA is available)"
+msgstr "需要 vo=gpu（任何支持 CUDA 的平台）"
+
+msgid "requires vo=gpu with gpu-context=d3d11 or gpu-context=angle (Windows 8+ only)"
+msgstr "需要 vo=gpu 且 gpu-context=d3d11 或 gpu-context=angle（仅限 Windows 8+）"
+
+msgid "requires vo=gpu with gpu-context=d3d11, gpu-context=angle or gpu-context=dxinterop (Windows only)"
+msgstr "需要 vo=gpu 且 gpu-context=d3d11、gpu-context=angle 或 gpu-context=dxinterop（仅限 Windows）"
+
+msgid "Reset"
+msgstr "重置"
+
+msgid "Right"
+msgstr "右侧"
+
+msgid "Rotate Video"
+msgstr "旋转视频"
+
+msgid "Same as minimum-aspect-ratio but used for audio files."
+msgstr "与 minimum-aspect-ratio 相同，但用于音频文件。"
+
+msgid "Same as yes (for compatibility)."
+msgstr "与 yes 相同（为了兼容性）。"
+
+msgid "Save playback speed to mpv.conf on exit and restore it on start. Temporary hold-speed boost is not saved. (mpv.net specific option)"
+msgstr "退出时将播放倍速写入 mpv.conf，启动时恢复。长按临时加速不会被保存。（mpv.net 专用选项）"
+
+msgid "Save the window position on exit and restore it on start. (mpv.net specific option)"
+msgstr "退出时保存窗口位置，启动时恢复。（mpv.net 专用选项）"
+
+msgid "Save volume and mute on exit and restore it on start. (mpv.net specific option)"
+msgstr "退出时保存音量和静音状态，启动时恢复。（mpv.net 专用选项）"
+
+msgid "Screen"
+msgstr "窗口"
+
+msgid "Screenshot"
+msgstr "截图"
+
+msgid "See sub-color. Color used for sub text background. You can use sub-shadow-offset to change its size relative to the text."
+msgstr "参见 sub-color。用于字幕文本背景的颜色。可以使用 sub-shadow-offset 更改它相对于文本的大小。"
+
+msgid "See sub-color. Color used for the sub font border. Ignored when sub-back-color is specified (or more exactly: when that option is not set to completely transparent)."
+msgstr "参见 sub-color。用于字幕字体边框的颜色。当指定了 sub-back-color 时被忽略（更确切地说：当该选项未设为完全透明时）。"
+
+msgid "Select when to use precise seeks that are not limited to keyframes. Such seeks require decoding video from the previous keyframe up to the target position and so can take some time depending on decoding performance. For some video formats, precise seeks are disabled. This option selects the default choice to use for seeks; it is possible to explicitly override that default in the definition of key bindings and in input commands."
+msgstr "选择何时使用不受关键帧限制的精确跳转。此类跳转需要从上一个关键帧解码视频到目标位置，因此视解码性能可能需要一些时间。对某些视频格式，精确跳转被禁用。此选项选择跳转的默认方式；可以在按键绑定定义和输入命令中显式覆盖该默认值。"
+
+msgid "Semicolon separated list of paths to be excluded from the history log feature."
+msgstr "以分号分隔的路径列表，这些路径将被历史记录功能排除。"
+
+msgid "Set dither target depth to N. Note that the depth of the connected video display device cannot be detected. Often, LCD panels will do dithering on their own, which conflicts with this option and leads to ugly output."
+msgstr "将抖动目标位深设为 N。注意，无法检测所连接的视频显示设备的位深。LCD 面板通常会自行进行抖动，这与此选项冲突，会导致难看的输出。"
+
+msgid "Set the duration of the OSD messages in ms. Default: 1000"
+msgstr "设置 OSD 消息的持续时间，单位为毫秒。默认值：1000"
+
+msgid "Set the image file type used for saving screenshots."
+msgstr "设置用于保存截图的图像文件类型。"
+
+msgid "Set the startup volume. 0 means silence, 100 means no volume reduction or amplification. Negative values can be passed for compatibility, but are treated as 0. Since mpv 0.18.1, this always controls the internal mixer (aka \"softvol\"). Default: 100"
+msgstr "设置启动音量。0 表示静音，100 表示既不降低也不放大音量。为兼容性可传入负值，但会被当作 0。自 mpv 0.18.1 起，此选项始终控制内部混音器（即 \"softvol\"）。默认值：100"
+
+msgid "Set/clear A-B loop points"
+msgstr "设定/清除 AB循环"
+
+msgid "Sets pause=no on file load. (mpv.net specific option)"
+msgstr "在加载文件时设置 pause=no。（mpv.net 专用选项）"
+
+msgid "Setting to remember the window size. (mpv.net specific option)"
+msgstr "记住窗口大小的方式。（mpv.net 专用选项）"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Settings > Open Config Folder"
+msgstr "设置 > 打开配置目录"
+
+msgid "Settings > Setup > Register audio file associations"
+msgstr "工具 > 关联格式 > 关联音频"
+
+msgid "Settings > Setup > Register image file associations"
+msgstr "工具 > 关联格式 > 关联图片"
+
+msgid "Settings > Setup > Register video file associations"
+msgstr "工具 > 关联格式 > 关联视频"
+
+msgid "Settings > Setup > Unregister file associations"
+msgstr "工具 > 关联格式 > 注销所有关联格式"
+
+msgid "Settings > Show Config Editor"
+msgstr "设置 > 设置编辑器"
+
+msgid "Settings > Show Input Editor"
+msgstr "设置 > 自定义快捷键"
+
+msgid "Setup"
+msgstr "文件关联"
+
+msgid "Show a message on OSD when playback starts. The string is expanded for properties, e.g. osd-playing-msg='file: ${filename}' will show the message file: followed by a space and the currently played filename. For more information visit:"
+msgstr "播放开始时在 OSD 上显示一条消息。该字符串会展开属性，例如 osd-playing-msg='file: ${filename}' 将显示消息 file: 加一个空格和当前播放的文件名。更多信息请访问："
+
+msgid "Show Audio Devices"
+msgstr "音频设备列表"
+
+msgid "Show Audio Tracks"
+msgstr ".NET音频轨列表"
+
+msgid "Show Chapters"
+msgstr ".NET章节列表"
+
+msgid "Show Commands"
+msgstr "命令列表"
+
+msgid "Show Config Editor"
+msgstr "设置编辑器"
+
+msgid "Show Console"
+msgstr "显示 控制台"
+
+msgid "Show current file in File Explorer"
+msgstr "在文件资源管理器中显示当前文件"
+
+msgid "Show Decoders"
+msgstr "所有解码器"
+
+msgid "Show Demuxers"
+msgstr "所有分离器"
+
+msgid "Show History"
+msgstr "历史记录"
+
+msgid "Show Input Editor"
+msgstr "自定义快捷键"
+
+msgid "Show Keys"
+msgstr "所有键值"
+
+msgid "Show Media Info"
+msgstr "OSD简要信息"
+
+msgid "Show Media Info Advanced"
+msgstr "MediaInfo"
+
+msgid "Show mpv manual"
+msgstr "查看 mpv 手册"
+
+msgid "Exclusive options"
+msgstr "专属选项"
+
+msgid "Show Playlist"
+msgstr ".NET播放列表"
+
+msgid "Show Profile Selection"
+msgstr "应用配置预设"
+
+msgid "Show Profiles"
+msgstr "可用配置预设组"
+
+msgid "Show Progress"
+msgstr "显示进度"
+
+msgid "Show progress in taskbar."
+msgstr "在任务栏中显示进度。"
+
+msgid "Show Properties"
+msgstr "属性列表"
+
+msgid "Show Protocols"
+msgstr "协议列表"
+
+msgid "Show Recent"
+msgstr "打开最近播放列表"
+
+msgid "Show Subtitle Tracks"
+msgstr ".NET字幕轨列表"
+
+msgid "Show window with decoration (titlebar, border)."
+msgstr "显示带装饰（标题栏、边框）的窗口。"
+
+msgid "Shrink"
+msgstr "递减"
+
+msgid "Shuffle Playlist"
+msgstr "播放列表乱序重排"
+
+msgid "Snap the player window to screen edges."
+msgstr "将播放器窗口吸附到屏幕边缘。"
+
+msgid "Specify a priority list of audio languages to use. Different container formats employ different language codes. DVDs use ISO 639-1 two-letter language codes, Matroska, MPEG-TS and NUT use ISO 639-2 three-letter language codes, while OGM uses a free-form identifier. See also aid.\n\nExamples\n\nmpv dvd://1 alang=hu,en chooses the Hungarian language track on a DVD and falls back on English if Hungarian is not available.\n\nmpv alang=jpn example.mkv plays a Matroska file with Japanese audio."
+msgstr "指定要使用的音频语言优先级列表。不同的容器格式使用不同的语言代码。DVD 使用 ISO 639-1 双字母语言代码，Matroska、MPEG-TS 和 NUT 使用 ISO 639-2 三字母语言代码，而 OGM 使用自由格式的标识符。另见 aid。\n\n示例\n\nmpv dvd://1 alang=hu,en 选择 DVD 上的匈牙利语音轨，如果匈牙利语不可用则回退到英语。\n\nmpv alang=jpn example.mkv 以日语音频播放一个 Matroska 文件。"
+
+msgid "Specify a priority list of subtitle languages to use. Different container formats employ different language codes. DVDs use ISO 639-1 two letter language codes, Matroska uses ISO 639-2 three letter language codes while OGM uses a free-form identifier. See also sid."
+msgstr "指定要使用的字幕语言优先级列表。不同的容器格式使用不同的语言代码。DVD 使用 ISO 639-1 双字母语言代码，Matroska 使用 ISO 639-2 三字母语言代码，而 OGM 使用自由格式的标识符。另见 sid。"
+
+msgid "Specify font to use for subtitles that do not themselves specify a particular font. The default is  sans-serif."
+msgstr "为本身未指定特定字体的字幕指定要使用的字体。默认值为 sans-serif。"
+
+msgid "Specify the color used for unstyled text subtitles.\n\nThe color is specified in the form r/g/b, where each color component is specified as number in the range 0.0 to 1.0. It's also possible to specify the transparency by using r/g/b/a, where the alpha value 0 means fully transparent, and 1.0 means opaque. If the alpha component is not given, the color is 100% opaque.\n\nPassing a single number to the option sets the sub to gray, and the form gray/a lets you specify alpha additionally.\n\nExamples\n\n1.0/0.0/0.0 set sub to opaque red\n1.0/0.0/0.0/0.75 set sub to opaque red with 75% alpha\n0.5/0.75 set sub to 50% gray with 75% alpha\n\nAlternatively, the color can be specified as a RGB hex triplet in the form #RRGGBB, where each 2-digit group expresses a color value in the range 0 (00) to 255 (FF). For example, #FF0000 is red. This is similar to web colors. Alpha is given with #AARRGGBB.\n\nExamples\n\n#FF0000 set sub to opaque red\n#C0808080 set sub to 50% gray with 75% alpha"
+msgstr "指定用于无样式文本字幕的颜色。\n\n颜色以 r/g/b 形式指定，每个颜色分量为 0.0 到 1.0 范围内的数字。也可以使用 r/g/b/a 指定透明度，其中 alpha 值 0 表示完全透明，1.0 表示不透明。如果未给出 alpha 分量，则颜色为 100% 不透明。\n\n向此选项传入单个数字会将字幕设为灰色，使用 gray/a 形式可额外指定 alpha。\n\n示例\n\n1.0/0.0/0.0 将字幕设为不透明红色\n1.0/0.0/0.0/0.75 将字幕设为带 75% alpha 的不透明红色\n0.5/0.75 将字幕设为带 75% alpha 的 50% 灰色\n\n另外，颜色也可以指定为 #RRGGBB 形式的 RGB 十六进制三元组，其中每个 2 位组表示 0（00）到 255（FF）范围内的颜色值。例如 #FF0000 是红色。这与网页颜色类似。alpha 用 #AARRGGBB 指定。\n\n示例\n\n#FF0000 将字幕设为不透明红色\n#C0808080 将字幕设为带 75% alpha 的 50% 灰色"
+
+msgid "Specify the filename template used to save screenshots. The template specifies the filename without file extension, and can contain format specifiers, which will be substituted when taking a screenshot. By default, the template is mpv-shot%n, which results in filenames like  mpv-shot0012.png for example.\n\nFind the full documentation here:"
+msgstr "指定用于保存截图的文件名模板。模板指定不带扩展名的文件名，可以包含格式说明符，截图时这些说明符会被替换。默认模板为 mpv-shot%n，例如会生成类似 mpv-shot0012.png 的文件名。\n\n完整文档请见："
+
+msgid "Specify the hardware video decoding API that should be used if possible. Whether hardware decoding is actually done depends on the video codec. If hardware decoding is not possible, mpv will fall back on software decoding.\n\nFor more information visit:"
+msgstr "指定在可能时应使用的硬件视频解码 API。是否实际进行硬件解码取决于视频编解码器。如果无法进行硬件解码，mpv 将回退到软件解码。\n\n更多信息请访问："
+
+msgid "Specify the OSD font size. See sub-font-size for details. Default: 55"
+msgstr "指定 OSD 字号。详情参见 sub-font-size。默认值：55"
+
+msgid "Specify the sub font size. The unit is the size in scaled pixels at a window height of 720. The actual pixel size is scaled with the window height: if the window height is larger or smaller than 720, the actual size of the text increases or decreases as well. Default: 55"
+msgstr "指定字幕字号。单位是窗口高度为 720 时以缩放像素计的大小。实际像素大小随窗口高度缩放：如果窗口高度大于或小于 720，文本的实际大小也会相应增大或减小。默认值：55"
+
+msgid "Speed"
+msgstr "速度"
+
+msgid "Speed > -"
+msgstr "速度 > -"
+
+msgid "Speed > +10%"
+msgstr "速度 > +10%"
+
+msgid "Speed > -10%"
+msgstr "速度 > -10%"
+
+msgid "Speed > Double"
+msgstr "速度 > 两倍"
+
+msgid "Speed > Half"
+msgstr "速度 > 一半"
+
+msgid "Speed > Reset"
+msgstr "播放 > 速度 重置"
+
+msgid "Start the player in fullscreen mode."
+msgstr "以全屏模式启动播放器。"
+
+msgid "Start with a maximized window."
+msgstr "以最大化窗口启动。"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Store screenshots in this directory. This path is joined with the filename generated by screenshot-template. If the template filename is already absolute, the directory is ignored.\n\nIf the directory does not exist, it is created on the first screenshot. If it is not a directory, an error is generated when trying to write a screenshot."
+msgstr "将截图保存到此目录。此路径会与 screenshot-template 生成的文件名拼接。如果模板文件名已是绝对路径，则忽略该目录。\n\n如果该目录不存在，会在第一次截图时创建。如果它不是目录，尝试写入截图时会产生错误。"
+
+msgid "Subtitle"
+msgstr "字幕"
+
+msgid "Subtitle > -"
+msgstr "字幕 > -"
+
+msgid "Subtitle > Advanced > Toggle overriding SSA/ASS subtitle styles with the normal styles"
+msgstr "字幕 > 高级 > 开/关 用普通样式覆盖 SSA/ASS 字幕样式"
+
+msgid "Subtitle > Cycle/Next"
+msgstr "字幕 > 切换 主字幕"
+
+msgid "Subtitle > Decrease Subtitle Font Size"
+msgstr "字幕 > 字号 -0.1"
+
+msgid "Subtitle > Delay +0.1"
+msgstr "字幕 > 延迟 +0.1"
+
+msgid "Subtitle > Delay -0.1"
+msgstr "字幕 > 延迟 -0.1"
+
+msgid "Subtitle > Increase Subtitle Font Size"
+msgstr "字幕 > 字号 +0.1"
+
+msgid "Subtitle > Move Down"
+msgstr "字幕 > 下移"
+
+msgid "Subtitle > Move Up"
+msgstr "字幕 > 上移"
+
+msgid "Subtitle > Toggle Visibility"
+msgstr "字幕 > 切换 显示状态"
+
+msgid "Tag screenshots with the appropriate colorspace. Note that not all formats are supported."
+msgstr "为截图标记相应的色彩空间。注意并非所有格式都受支持。"
+
+msgid "Take Screenshot"
+msgstr "截图"
+
+msgid "Take Screenshot without subtitles"
+msgstr "截图（不含字幕）"
+
+msgid "The GPU renderer filter function to use when upscaling video. There are some more filters, but most are not as useful. For a complete list, pass help as value, e.g.: mpv --scale=help"
+msgstr "放大视频时使用的 GPU 渲染器滤镜函数。还有一些其他滤镜，但大多不那么有用。要获取完整列表，请传入 help 作为值，例如：mpv --scale=help"
+
+msgid "The options that are saved in \"watch later\" files if they have been changed since when mpv started. These values will be restored the next time the files are played. This is a string list option. For more information visit:"
+msgstr "自 mpv 启动以来被更改的选项将保存到 \"watch later\"（稍后观看）文件中。这些值将在下次播放相应文件时恢复。这是一个字符串列表选项。更多信息请访问："
+
+msgid "Threshold in milliseconds to wait for libmpv returning the video resolution before the window is shown, otherwise default dimensions are used as defined by autofit and start-size. Default: 1500 (mpv.net specific option)"
+msgstr "等待 libmpv 返回视频分辨率的阈值（毫秒），超时后才显示窗口，否则使用由 autofit 和 start-size 定义的默认尺寸。默认值：1500（mpv.net 专用选项）"
+
+msgid "Titles"
+msgstr "标题"
+
+msgid "Toggle Border"
+msgstr "切换 边框模式"
+
+msgid "Toggle Deinterlace"
+msgstr "开/关 去隔行扫描"
+
+msgid "Toggle Fullscreen"
+msgstr "切换全屏"
+
+msgid "Toggle Hardware Decoding"
+msgstr "开/关 硬件解码"
+
+msgid "Toggle infinite file looping"
+msgstr "开/关 循环播放"
+
+msgid "Toggle On Top"
+msgstr "开/关 置顶状态"
+
+msgid "Toggle OSC Visibility"
+msgstr "切换 OSC 可见性"
+
+msgid "Toggle overriding SSA/ASS subtitle styles with the normal styles"
+msgstr "开/关 用普通样式覆盖 SSA/ASS 字幕样式"
+
+msgid "Toggle Statistics"
+msgstr "开/关 统计数据"
+
+msgid "Toggle Visibility"
+msgstr "切换 显示状态"
+
+msgid "Tools"
+msgstr "工具"
+
+msgid "Tools > Exit Watch Later"
+msgstr "工具 > 退出稍后观看"
+
+msgid "Tools > Set/clear A-B loop points"
+msgstr "播放 > 设定/清除 AB循环"
+
+msgid "Tools > Show current file in File Explorer"
+msgstr "工具 > 在文件资源管理器中显示当前文件"
+
+msgid "Tools > Show History"
+msgstr "工具 > 输出文本 > 历史记录"
+
+msgid "Tools > Shuffle Playlist"
+msgstr "列表 > 播放列表乱序重排"
+
+msgid "Tools > Toggle Hardware Decoding"
+msgstr "工具 > 开/关 硬件解码"
+
+msgid "Tools > Toggle infinite file looping"
+msgstr "播放 > 开/关 循环播放"
+
+msgid "Top"
+msgstr "顶部"
+
+msgid "Track"
+msgstr "轨道"
+
+msgid "UI"
+msgstr "界面"
+
+msgid "Unregister file associations"
+msgstr "注销所有关联格式"
+
+msgid "Up"
+msgstr "上"
+
+msgid "Usage of the media info library instead of mpv to access media information. (mpv.net specific option)"
+msgstr "使用 MediaInfo 库而非 mpv 来访问媒体信息。（mpv.net 专用选项）"
+
+msgid "Use any available API"
+msgstr "使用任何可用的 API"
+
+msgid "Use precise seeks if the seek is to an absolute position in the file, such as a chapter seek, but not for relative seeks like the default behavior of arrow keys."
+msgstr "如果跳转目标是文件中的绝对位置（如章节跳转），则使用精确跳转，但对于相对跳转（如方向键的默认行为）则不使用。"
+
+msgid "Use precise seeks whenever possible."
+msgstr "尽可能使用精确跳转。"
+
+msgid "Use the operating system UI language when a translation is available"
+msgstr "有翻译时跟随操作系统界面语言"
+
+msgid "User interface language. system follows the OS UI language. Restart mpv.net after changing. (mpv.net specific option)"
+msgstr "用户界面语言。system 跟随操作系统界面语言。修改后需重启 mpv.net。（mpv.net 专用选项）"
+
+msgid "Video"
+msgstr "视频"
+
+msgid "Video > -"
+msgstr "视频 > -"
+
+msgid "Video > Cycle Aspect Ratio"
+msgstr "视频 > 切换宽高比"
+
+msgid "Video > Decrease Brightness"
+msgstr "视频 > 均衡器 > 亮度 -1"
+
+msgid "Video > Decrease Contrast"
+msgstr "视频 > 均衡器 > 对比度 -1"
+
+msgid "Video > Decrease Gamma"
+msgstr "视频 > 均衡器 > 伽马 -1"
+
+msgid "Video > Decrease Saturation"
+msgstr "视频 > 均衡器 > 饱和度 -1"
+
+msgid "Video > Increase Brightness"
+msgstr "视频 > 均衡器 > 亮度 +1"
+
+msgid "Video > Increase Contrast"
+msgstr "视频 > 均衡器 > 对比度 +1"
+
+msgid "Video > Increase Gamma"
+msgstr "视频 > 均衡器 > 伽马 +1"
+
+msgid "Video > Increase Saturation"
+msgstr "视频 > 均衡器 > 饱和度 +1"
+
+msgid "Video > Rotate Video"
+msgstr "视频 > 旋转视频"
+
+msgid "Video > Take Screenshot"
+msgstr "视频 > 截图"
+
+msgid "Video > Take Screenshot without subtitles"
+msgstr "视频 > 截图（不含字幕）"
+
+msgid "Video > Toggle Deinterlace"
+msgstr "视频 > 开/关 去隔行扫描"
+
+msgid "Video file extensions used to create file associations and used by the auto-load-folder feature. (mpv.net specific option)"
+msgstr "用于创建文件关联并被自动加载文件夹功能使用的视频文件扩展名。（mpv.net 专用选项）"
+
+msgid "Video output driver that uses the Direct3D interface."
+msgstr "使用 Direct3D 接口的视频输出驱动。"
+
+msgid "Video output drivers to be used.\n\nFor more information visit:"
+msgstr "要使用的视频输出驱动。\n\n更多信息请访问："
+
+msgid "View"
+msgstr "视图"
+
+msgid "View > Advanced > Show Audio Devices"
+msgstr "工具 > 输出文本 > 音频设备列表"
+
+msgid "View > Advanced > Show Commands"
+msgstr "工具 > 输出文本 > 命令列表"
+
+msgid "View > Advanced > Show Console"
+msgstr "工具 > 显示 控制台"
+
+msgid "View > Advanced > Show Decoders"
+msgstr "工具 > 查看面板 > 所有解码器"
+
+msgid "View > Advanced > Show Demuxers"
+msgstr "工具 > 查看面板 > 所有分离器"
+
+msgid "View > Advanced > Show Keys"
+msgstr "工具 > 查看面板 > 所有键值"
+
+msgid "View > Advanced > Show Properties"
+msgstr "工具 > 查看面板 > 属性列表"
+
+msgid "View > Advanced > Show Protocols"
+msgstr "工具 > 查看面板 > 协议列表"
+
+msgid "View > Move > Bottom"
+msgstr "画面 > 窗口移动 > 底部"
+
+msgid "View > Move > Center"
+msgstr "画面 > 窗口移动 > 居中"
+
+msgid "View > Move > Left"
+msgstr "画面 > 窗口移动 > 左侧"
+
+msgid "View > Move > Right"
+msgstr "画面 > 窗口移动 > 右侧"
+
+msgid "View > Move > Top"
+msgstr "画面 > 窗口移动 > 顶部"
+
+msgid "View > Show Audio Tracks"
+msgstr "列表 > .NET音频轨列表"
+
+msgid "View > Show Chapters"
+msgstr "列表 > .NET章节列表"
+
+msgid "View > Show Media Info"
+msgstr "文件 > OSD简要信息"
+
+msgid "View > Show Media Info Advanced"
+msgstr "工具 > 查看面板 > MediaInfo"
+
+msgid "View > Show Playlist"
+msgstr "列表 > .NET播放列表"
+
+msgid "View > Show Profile Selection"
+msgstr "工具 > 查看面板 > 应用配置预设"
+
+msgid "View > Show Profiles"
+msgstr "工具 > 输出文本 > 可用配置预设组"
+
+msgid "View > Show Progress"
+msgstr "视图 > 显示进度"
+
+msgid "View > Show Recent"
+msgstr "列表 > 打开最近播放列表"
+
+msgid "View > Show Subtitle Tracks"
+msgstr "列表 > .NET字幕轨列表"
+
+msgid "View > Toggle Border"
+msgstr "画面 > 切换 边框模式"
+
+msgid "View > Toggle On Top"
+msgstr "画面 > 开/关 置顶状态"
+
+msgid "View > Toggle OSC Visibility"
+msgstr "视图 > 切换 OSC 可见性"
+
+msgid "View > Toggle Statistics"
+msgstr "工具 > 开/关 统计数据"
+
+msgid "View > Zoom > -"
+msgstr "画面 > 窗口缩放 > -"
+
+msgid "View > Zoom > 100 %"
+msgstr "画面 > 窗口缩放 > 100%"
+
+msgid "View > Zoom > 200 %"
+msgstr "画面 > 窗口缩放 > 200%"
+
+msgid "View > Zoom > 300 %"
+msgstr "画面 > 窗口缩放 > 300%"
+
+msgid "View > Zoom > 50 %"
+msgstr "画面 > 窗口缩放 >  50%"
+
+msgid "View > Zoom > Enlarge"
+msgstr "画面 > 窗口缩放 > 递增"
+
+msgid "View > Zoom > Shrink"
+msgstr "画面 > 窗口缩放 > 递减"
+
+msgid "VK_KHR_win32_surface"
+msgstr "VK_KHR_win32_surface"
+
+msgid "Volume"
+msgstr "音量"
+
+msgid "Volume > -"
+msgstr "音量 > -"
+
+msgid "Volume > Down"
+msgstr "音量 > 减小"
+
+msgid "Volume > Mute"
+msgstr "音频 > 开/关 静音"
+
+msgid "Volume > Up"
+msgstr "音量 > 增大"
+
+msgid "Watch Later"
+msgstr "稍后观看"
+
+msgid "Website mpv"
+msgstr "mpv 网站"
+
+msgid "Website mpv.net"
+msgstr "mpv.net 网站"
+
+msgid "When upscaling, use a sigmoidal color transform to avoid emphasizing ringing artifacts. This also implies linear-scaling."
+msgstr "放大时使用 S 形（sigmoidal）颜色变换，以避免加重振铃伪影。这也意味着使用 linear-scaling。"
+
+msgid "When using convolution based filters, extend the filter size when downscaling. Increases quality, but reduces performance while downscaling.\n\nThis will perform slightly sub-optimally for anamorphic video (but still better than without it) since it will extend the size to match only the milder of the scale factors between the axes."
+msgstr "使用基于卷积的滤镜时，在缩小时扩展滤镜尺寸。可提高质量，但会降低缩小时的性能。\n\n对变形宽银幕（anamorphic）视频，表现会略有欠佳（但仍好于不启用），因为它只会将尺寸扩展到两轴缩放因子中较温和的那个。"
+
+msgid "When using --hdr-compute-peak, allow delaying the detected peak by a frame when beneficial for performance. In particular, this is required to avoid an unnecessary FBO indirection when no advanced rendering is required otherwise. Has no effect if there already is an indirect pass, such as when advanced scaling is enabled. (Only affects --vo=gpu-next, note that --vo=gpu always delays the peak.)"
+msgstr "使用 --hdr-compute-peak 时，若有利于性能，允许将检测到的峰值延迟一帧。特别是，当其他方面不需要高级渲染时，这可以避免不必要的 FBO 间接传递。如果已经存在间接传递（例如启用了高级缩放），则没有影响。（仅影响 --vo=gpu-next，注意 --vo=gpu 总是延迟峰值。）"
+
+msgid "Whether to scale the OSD with the window size. If this is disabled, osd-font-size and other OSD options that use scaled pixels are always in actual pixels. The effect is that changing the window size won't change the OSD font size."
+msgstr "OSD 是否随窗口大小缩放。如果禁用，osd-font-size 和其他使用缩放像素的 OSD 选项将始终以实际像素为单位。效果是更改窗口大小不会改变 OSD 字号。"
+
+msgid "Win32, with native Direct3D 11 rendering."
+msgstr "Win32，使用原生 Direct3D 11 渲染。"
+
+msgid "Win32/WGL"
+msgstr "Win32/WGL"
+
+msgid "Window height is always remembered"
+msgstr "始终记住窗口高度"
+
+msgid "Window height is remembered in the current session"
+msgstr "当前会话记住窗口高度"
+
+msgid "Window size is always remembered"
+msgstr "始终记住窗口大小"
+
+msgid "Window size is remembered in the current session"
+msgstr "当前会话记住窗口大小"
+
+msgid "Window size is set to video resolution"
+msgstr "窗口大小设为视频分辨率"
+
+msgid "Window width is always remembered"
+msgstr "始终记住窗口宽度"
+
+msgid "Window width is remembered in the current session"
+msgstr "当前会话记住窗口宽度"
+
+msgid "Write JPEG files with the same chroma subsampling as the video. If disabled, the libjpeg default is used."
+msgstr "以与视频相同的色度子采样写入 JPEG 文件。如果禁用，则使用 libjpeg 默认值。"
+
+msgid "Zoom"
+msgstr "窗口缩放"
+
+
+msgid "Clear List"
+msgstr "清空列表"
+
+msgid "No subtitles"
+msgstr "无字幕"
+
+msgid "Chinese"
+msgstr "中文"
+
+msgid "Chinese (Traditional)"
+msgstr "中文(繁体)"
+
+msgid "Forced"
+msgstr "强制"
+
+msgid "External"
+msgstr "外挂"
+
+msgid "Key for hold-to-speed (mpv key name: RIGHT, LEFT, UP, DOWN, SPACE, a-z, F1...). Hold uses hold-speed-right; short press seeks forward. (mpv.net specific option)"
+msgstr "长按倍速的按键（mpv 键名：RIGHT、LEFT、UP、DOWN、SPACE、a-z、F1...）。长按使用 hold-speed-right 倍率；短按快进。（mpv.net 专用选项）"
+
+msgid "-1"
+msgstr "-1"
+
+msgid "+1"
+msgstr "+1"
+
+msgid "Speed > -1"
+msgstr "速度 > -1"
+
+msgid "Speed > +1"
+msgstr "速度 > +1"
+
+msgid "Speed > -0.1"
+msgstr "速度 > -0.1"
+
+msgid "Speed > +0.1"
+msgstr "速度 > +0.1"
+
+msgid "-0.1"
+msgstr "-0.1"
+
+msgid "+0.1"
+msgstr "+0.1"
+
+msgid "Speed > -0.5"
+msgstr "速度 > -0.5"
+
+msgid "Speed > +0.5"
+msgstr "速度 > +0.5"
+
+msgid "-0.5"
+msgstr "-0.5"
+
+msgid "+0.5"
+msgstr "+0.5"
+
+msgid "Speed > -0.05"
+msgstr "速度 > -0.05"
+
+msgid "Speed > +0.05"
+msgstr "速度 > +0.05"
+
+msgid "-0.05"
+msgstr "-0.05"
+
+msgid "+0.05"
+msgstr "+0.05"
+
+msgid "Speed > -0.01"
+msgstr "速度 > -0.01"
+
+msgid "Speed > +0.01"
+msgstr "速度 > +0.01"
+
+msgid "-0.01"
+msgstr "-0.01"
+
+msgid "+0.01"
+msgstr "+0.01"
+
+msgid "Default size at launch, then follows the video; position can be remembered, size is not"
+msgstr "启动时使用默认大小，开始播放后跟随视频；可记住位置，不记住大小"
+
+msgid "Prefer libplacebo renderer; automatically fall back to gpu if unavailable."
+msgstr "优先使用 libplacebo 渲染器；不可用时自动回退到 gpu。"
+
+msgid "libplacebo-based renderer. Generally higher quality; recommended when stable."
+msgstr "基于 libplacebo 的渲染器。画质通常更好；稳定时推荐使用。"
+
+msgid "General purpose, customizable, GPU-accelerated video output driver. Use as fallback or for max compatibility."
+msgstr "通用、可定制的 GPU 加速视频输出驱动。适合作为回退或追求最大兼容性时使用。"
+

@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,6 +27,10 @@ namespace mpvnet
         {
             InitializeComponent();
             DataContext = this;
+            Title = I18n._("Config Editor");
+            SearchControl.HintText = I18n._("Find a setting");
+            ShowMpvNetSpecific.Text = I18n._("Exclusive options");
+            PreviewTextBlock.Text = I18n._("Preview mpv.conf");
             SearchControl.SearchTextBox.TextChanged += SearchTextBox_TextChanged;
             LoadConf(Core.ConfPath);
             LoadConf(App.ConfPath);
@@ -319,9 +323,6 @@ namespace mpvnet
         }
 
         void PreviewTextBlock_MouseUp(object sender, MouseButtonEventArgs e) => Msg.ShowInfo(GetContent("mpv"));
-
-        void ShowManualTextBlock_MouseUp(object sender, MouseButtonEventArgs e) =>
-            ProcessHelp.ShellExecute("https://mpv.io/manual/master/");
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
