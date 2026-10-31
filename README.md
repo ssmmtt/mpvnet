@@ -1,10 +1,10 @@
 
 ![](docs/img/mpvnet.png)
 
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/stax76/mpv.net) ![GitHub closed issues](https://img.shields.io/github/issues-closed/stax76/mpv.net) ![GitHub All Releases](https://img.shields.io/github/downloads/stax76/mpv.net/total) ![GitHub tag (latest by date)](https://img.shields.io/github/tag-date/stax76/mpv.net) ![GitHub stars](https://img.shields.io/github/stars/stax76/mpv.net)
+🎞 mpvnet
+=========
 
-🎞 mpv.net
-==========
+> **本仓库说明：** 本项目基于开源项目 [mpv.net](https://github.com/mpvnet-player/mpv.net) 的 `v6.0.4.0-stable` 进行修改与续维护，原项目采用 [GPL-2.0](License.txt) 许可。向原作者 Frank Skare（stax76）及贡献者致谢。本仓库为个人维护构建，**不提供 issue 支持**。
 
 mpv.net is a modern desktop media player for Windows based on the popular [mpv](https://mpv.io) player.
 
@@ -41,11 +41,6 @@ Play controls with a modern flat design.
 #### GPU video decoding
 
 Leverages the FFmpeg hwaccel APIs to support DXVA2 video decoding acceleration.
-
-
-#### Active development
-
-mpv.net is under active development.
 
 
 #### Based on libmpv
@@ -106,9 +101,9 @@ Features exclusiv to mpv.net
 - Files can be enqueued from File Explorer
 
 
-## [Support](docs/Manual.md#support)
+## Support
 
-[Support section of the manual.](docs/Manual.md#support)
+本仓库不处理 issue，请自行排查或参考原项目文档。
 
 
 ## [Download](docs/Manual.md#download)
@@ -170,8 +165,3 @@ The command palette based playlist showing my favorite artist of the stax record
 
 ![Playlist](docs/img/Playlist.png)
 
-
-List of my apps
----------------
-
-https://stax76.github.io/frankskare
