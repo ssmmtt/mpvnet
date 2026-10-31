@@ -1,0 +1,18 @@
+# Editor
+vo = gpu-next,gpu
+hwdec = auto
+osd-bar-w = 100
+osd-bar-h = 2
+osd-bar-align-y = -1
+osd-border-size = 1
+osd-font-size = 40
+osd-duration = 3000
+osd-on-seek = msg-bar
+ao = wasapi
+audio-file-auto = fuzzy
+sub-auto = fuzzy
+slang = chs,sc,zh-Hans,zh-CN,zh,chi,zho
+demuxer-max-bytes = '300MiB'
+keep-open = yes
+save-position-on-quit = yes
+snap-window = yes

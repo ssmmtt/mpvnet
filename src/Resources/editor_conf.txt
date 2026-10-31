@@ -1,4 +1,13 @@
 
+name = language
+file = mpvnet
+default = system
+filter = General
+help = User interface language. system follows the OS UI language. Restart mpv.net after changing. (mpv.net specific option)
+option = system  Use the operating system UI language when a translation is available
+option = en      English
+option = zh      Chinese (Simplified)
+
 name = process-instance
 file = mpvnet
 default = single
@@ -10,8 +19,9 @@ option = queue   Force a single process and add files to playlist
 
 name = recent-count
 file = mpvnet
+default = 50
 filter = General
-help = <int> Amount of recent files to be remembered. Default: 15 (mpv.net specific option)
+help = <int> Amount of recent files to be remembered. Default: 50 (mpv.net specific option)
 
 name = media-info
 file = mpvnet
@@ -20,12 +30,6 @@ filter = General
 help = Usage of the media info library instead of mpv to access media information. (mpv.net specific option)
 option = yes
 option = no
-
-name = history-filter
-file = mpvnet
-filter = General
-width = 500
-help = Semicolon separated list of paths to be excluded from the history log feature.
 
 name = video-file-extensions
 file = mpvnet
@@ -55,25 +59,26 @@ option = no
 
 name = vo
 file = mpv
-default = gpu
+default = gpu-next,gpu
 filter = Video
-help = Video output drivers to be used.\n\nFor more information visit:
+help = Video output drivers to be used. Prefer gpu-next; fall back to gpu if it fails to init.\n\nFor more information visit:
 url = https://mpv.io/manual/master/#video-output-drivers-vo
-option = gpu       General purpose, customizable, GPU-accelerated video output driver. It supports extended scaling methods, dithering, color management, custom shaders, HDR, and more.
-option = gpu-next  Experimental video renderer based on libplacebo. This supports almost the same set of features as --vo=gpu.
+option = gpu-next,gpu  Prefer libplacebo renderer; automatically fall back to gpu if unavailable.
+option = gpu-next  libplacebo-based renderer. Generally higher quality; recommended when stable.
+option = gpu       General purpose, customizable, GPU-accelerated video output driver. Use as fallback or for max compatibility.
 option = direct3d  Video output driver that uses the Direct3D interface.
 
 name = hwdec
 file = mpv
-default = no
+default = auto
 filter = Video
 url = https://mpv.io/manual/master/#options-hwdec
 help = Specify the hardware video decoding API that should be used if possible. Whether hardware decoding is actually done depends on the video codec. If hardware decoding is not possible, mpv will fall back on software decoding.\n\nFor more information visit:
-option = no            always use software decoding
 option = auto          enable best hw decoder
 option = yes           exactly the same as auto
 option = auto-copy     enable best hw decoder with copy-back
 option = auto-safe     enable any whitelisted hw decoder
+option = no            always use software decoding
 option = dxva2         requires vo=gpu with gpu-context=d3d11, gpu-context=angle or gpu-context=dxinterop (Windows only)
 option = dxva2-copy    copies video back to system RAM (Windows only)
 option = d3d11va       requires vo=gpu with gpu-context=d3d11 or gpu-context=angle (Windows 8+ only)
@@ -230,6 +235,14 @@ help = Save volume and mute on exit and restore it on start. (mpv.net specific o
 option = yes
 option = no
 
+name = remember-speed
+file = mpvnet
+default = yes
+filter = Playback
+help = Save playback speed to mpv.conf on exit and restore it on start. Temporary hold-speed boost is not saved. (mpv.net specific option)
+option = yes
+option = no
+
 name = alang
 file = mpv
 filter = Audio
@@ -372,16 +385,16 @@ help = <int> Maximum window height in percent. Default: 80
 
 name = start-size
 file = mpvnet
-default = height-session
+default = video
 filter = Screen
 help = Setting to remember the window size. (mpv.net specific option)
-option = width-session   Window width is remembered in the current session
-option = width-always    Window width is always remembered
+option = video           Default size at launch, then follows the video; position can be remembered, size is not
 option = height-session  Window height is remembered in the current session
 option = height-always   Window height is always remembered
-option = video           Window size is set to video resolution
-option = session         Window size is remembered in the current session
+option = width-session   Window width is remembered in the current session
+option = width-always    Window width is always remembered
 option = always          Window size is always remembered
+option = session         Window size is remembered in the current session
 
 name = keepaspect-window
 file = mpv
@@ -403,9 +416,9 @@ help = Same as minimum-aspect-ratio but used for audio files.
 
 name = remember-window-position
 file = mpvnet
-default = no
+default = yes
 filter = Screen
-help = Save the window position on exit. (mpv.net specific option)
+help = Save the window position on exit and restore it on start. (mpv.net specific option)
 option = yes
 option = no
 
@@ -470,6 +483,26 @@ filter = Playback
 help = Sets pause=no on file load. (mpv.net specific option)
 option = yes
 option = no
+
+name = resume-last
+file = mpvnet
+default = yes
+filter = Playback
+help = Continue last playback: when started without a file, open the most recent media from history. (mpv.net specific option)
+option = yes
+option = no
+
+name = hold-speed-right
+file = mpvnet
+default = 3
+filter = Playback
+help = <float >= 1> Hold-speed multiplier for hold-speed-key. Release restores previous speed. Set to 0 or 1 to disable. (mpv.net specific option)
+
+name = hold-speed-key
+file = mpvnet
+default = RIGHT
+filter = Playback
+help = Key for hold-to-speed (mpv key name: RIGHT, LEFT, UP, DOWN, SPACE, a-z, F1...). Hold uses hold-speed-right; short press seeks forward. (mpv.net specific option)
 
 name = loop-file
 file = mpv
