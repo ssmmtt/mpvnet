@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,29 +14,35 @@ namespace mpvnet
     {
         public static List<string> TempFiles { get; } = new List<string>();
 
-        public static string[] HistoryFilter { get; set; }
-
         public static string ConfPath { get => Core.ConfigFolder + "mpvnet.conf"; }
         public static string ProcessInstance { get; set; } = "single";
         public static string DarkMode { get; set; } = "always";
         public static string DarkTheme { get; set; } = "dark";
         public static string LightTheme { get; set; } = "light";
-        public static string StartSize { get; set; } = "height-session";
+        public static string LanguagePreference { get; set; } = "system";
+        public static string StartSize { get; set; } = "video";
 
         public static bool AutoLoadFolder { get; set; } = true;
         public static bool AutoPlay { get; set; }
+        public static bool ResumeLast { get; set; } = true;
         public static bool DebugMode { get; set; }
         public static bool Exit { get; set; }
+        public static float HoldSpeedRight { get; set; } = 3; // >1 enable; ≤1 off
+        public static string HoldSpeedKey { get; set; } = "RIGHT";
+        public static int HoldSpeedVk { get; set; } = 0x27; // VK_RIGHT
         public static bool IsTerminalAttached { get; } = Environment.GetEnvironmentVariable("_started_from_console") == "yes";
         public static bool MediaInfo { get; set; } = true;
         public static bool Queue { get; set; }
+        public static bool RememberSpeed { get; set; } = true;
         public static bool RememberVolume { get; set; } = true;
-        public static bool RememberWindowPosition { get; set; }
+        public static bool RememberWindowPosition { get; set; } = true;
         public static bool ShowLogo { get; set; } = true;
         public static bool ShowSantaLogo { get; set; } = true;
+        public static bool SpeedBoosting { get; set; }
+        public static double SpeedBeforeBoost { get; set; } = 1;
 
         public static int StartThreshold { get; set; } = 1500;
-        public static int RecentCount { get; set; } = 15;
+        public static int RecentCount { get; set; } = 50;
 
         public static float AutofitAudio { get; set; } = 0.7f;
         public static float AutofitImage { get; set; } = 0.8f;
@@ -66,6 +72,8 @@ namespace mpvnet
 
             foreach (var i in Conf)
                 ProcessProperty(i.Key, i.Value, true);
+
+            I18n.Init(LanguagePreference);
 
             if (DebugMode)
             {
@@ -209,12 +217,25 @@ namespace mpvnet
                 Core.SetPropertyInt("volume", Settings.Volume);
                 Core.SetPropertyString("mute", Settings.Mute);
             }
+
+            if (RememberSpeed)
+            {
+                double? speed = SpeedPersistence.Read(Core.ConfPath);
+                if (speed.HasValue)
+                    Core.SetPropertyDouble("speed", speed.Value);
+            }
         }
 
         static void Core_Shutdown()
         {
             Settings.Volume = Core.GetPropertyInt("volume");
             Settings.Mute = Core.GetPropertyString("mute");
+
+            if (RememberSpeed)
+            {
+                double speed = SpeedBoosting ? SpeedBeforeBoost : Core.GetPropertyDouble("speed");
+                SpeedPersistence.Write(Core.ConfPath, speed);
+            }
 
             SettingsManager.Save(Settings);
 
@@ -246,13 +267,20 @@ namespace mpvnet
                 case "audio-file-extensions": CorePlayer.AudioTypes = value.Split(" ,;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries); return true;
                 case "auto-load-folder": AutoLoadFolder = value == "yes"; return true;
                 case "auto-play": AutoPlay = value == "yes"; return true;
+                case "resume-last": ResumeLast = value == "yes"; return true;
                 case "autofit-audio": AutofitAudio = value.Trim('%').ToInt() / 100f; return true;
                 case "autofit-image": AutofitImage = value.Trim('%').ToInt() / 100f; return true;
                 case "dark-mode": DarkMode = value; return true;
                 case "dark-theme": DarkTheme = value.Trim('\'', '"'); return true;
                 case "debug-mode": DebugMode = value == "yes"; return true;
-                case "history-filter": HistoryFilter = value.Split(';'); return true;
+                case "hold-speed-right": HoldSpeedRight = value.ToFloat(); return true;
+                case "hold-speed-key":
+                    HoldSpeedKey = value.Trim().Trim('\'', '"');
+                    int vk = GlobalHotkey.ParseVirtualKey(HoldSpeedKey);
+                    HoldSpeedVk = vk > 0 ? vk : 0x27;
+                    return true;
                 case "image-file-extensions": CorePlayer.ImageTypes = value.Split(" ,;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries); return true;
+                case "language": LanguagePreference = value.Trim('\'', '"'); return true;
                 case "light-theme": LightTheme = value.Trim('\'', '"'); return true;
                 case "media-info": MediaInfo = value == "yes"; return true;
                 case "minimum-aspect-ratio-audio": MinimumAspectRatioAudio = value.ToFloat(); return true;
@@ -260,6 +288,7 @@ namespace mpvnet
                 case "process-instance": ProcessInstance = value; return true;
                 case "queue": Queue = value == "yes"; return true;
                 case "recent-count": RecentCount = value.ToInt(); return true;
+                case "remember-speed": RememberSpeed = value == "yes"; return true;
                 case "remember-volume": RememberVolume = value == "yes"; return true;
                 case "remember-window-position": RememberWindowPosition = value == "yes"; return true;
                 case "show-logo": ShowLogo = value == "yes"; return true;

@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +14,12 @@ namespace mpvnet
     {
         public static List<ConfSection> Parse(string content)
         {
-            string[] lines = content.Split(new[] { "\r\n" }, System.StringSplitOptions.None);
+            if (content == null)
+                content = "";
+
+            // Accept both CRLF and LF (editor_conf may be checked out with LF).
+            string[] lines = content.Replace("\r\n", "\n").Replace('\r', '\n')
+                .Split(new[] { '\n' }, System.StringSplitOptions.None);
             var sections = new List<ConfSection>();
             ConfSection currentGroup = null;
 
@@ -29,6 +34,12 @@ namespace mpvnet
                 }
                 else if (line.Contains("="))
                 {
+                    if (currentGroup == null)
+                    {
+                        currentGroup = new ConfSection();
+                        sections.Add(currentGroup);
+                    }
+
                     string name = line.Substring(0, line.IndexOf("=")).Trim();
                     string value = line.Substring(line.IndexOf("=") + 1).Trim();
 

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -90,10 +90,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Misc\App.cs" />
-    <Compile Include="Misc\Common.cs" />
-    <Compile Include="Misc\FolderBrowser.cs" />
-    <Compile Include="Misc\JSONParser.cs" />
+    <Compile Include="App\App.cs" />
+    <Compile Include="Config\ConfParser.cs" />
+    <Compile Include="Util\FolderBrowser.cs" />
+    <Compile Include="Util\JSONParser.cs" />
     <Compile Include="WinForms\SnapManager.cs" />
     <Compile Include="WPF\HandyControl\Controls\Attach\BorderElement.cs" />
     <Compile Include="WPF\HandyControl\Controls\Attach\MenuTopLineAttach.cs" />
@@ -125,8 +125,8 @@
     <Compile Include="WPF\MsgBox\MsgBoxUrl.cs" />
     <Compile Include="WPF\MsgBox\MsgEnumerators.cs" />
     <Compile Include="WPF\RelayCommand.cs" />
-    <Compile Include="Misc\CSharpScriptHost.cs" />
-    <Compile Include="Misc\Extension.cs" />
+    <Compile Include="Scripting\CSharpScriptHost.cs" />
+    <Compile Include="Scripting\Extension.cs" />
     <None Include="..\docs\Changelog.md">
       <Link>Changelog.md</Link>
     </None>
@@ -157,14 +157,20 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Misc\Global.cs" />
-    <Compile Include="Misc\Help.cs" />
-    <Compile Include="Misc\GlobalHotkey.cs" />
-    <Compile Include="Misc\Msg.cs" />
-    <Compile Include="Misc\Settings.cs" />
-    <Compile Include="Misc\Terminal.cs" />
-    <Compile Include="Misc\Theme.cs" />
-    <Compile Include="Misc\PowerShell.cs" />
+    <Compile Include="Core\Global.cs" />
+    <Compile Include="Features\SpeedPersistence.cs" />
+    <Compile Include="Features\HoldSpeedController.cs" />
+    <Compile Include="Features\ResumeLastPlayback.cs" />
+    <Compile Include="Features\SubtitleTrackUi.cs" />
+    <Compile Include="WinForms\TrackListMenuBuilder.cs" />
+    <Compile Include="Util\Help.cs" />
+    <Compile Include="Config\I18n.cs" />
+    <Compile Include="Commands\GlobalHotkey.cs" />
+    <Compile Include="UiShared\Msg.cs" />
+    <Compile Include="App\Settings.cs" />
+    <Compile Include="Util\Terminal.cs" />
+    <Compile Include="UiShared\Theme.cs" />
+    <Compile Include="Scripting\PowerShell.cs" />
     <Compile Include="Native\StockIcon.cs" />
     <Compile Include="WPF\CommandPaletteControl.xaml.cs">
       <DependentUpon>CommandPaletteControl.xaml</DependentUpon>
@@ -172,14 +178,14 @@
     <Compile Include="WPF\SearchTextBoxUserControl.xaml.cs">
       <DependentUpon>SearchTextBoxUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Misc\Conf.cs" />
+    <Compile Include="Config\Conf.cs" />
     <Compile Include="WPF\OptionSettingControl.xaml.cs">
       <DependentUpon>OptionSettingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\StringSettingControl.xaml.cs">
       <DependentUpon>StringSettingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Misc\ExtensionMethods.cs" />
+    <Compile Include="Util\ExtensionMethods.cs" />
     <Compile Include="Native\MediaInfo.cs" />
     <Compile Include="Native\Taskbar.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -194,11 +200,16 @@
     <Compile Include="WinForms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Misc\Misc.cs" />
-    <Compile Include="Misc\Player.cs" />
-    <Compile Include="Misc\Commands.cs" />
+    <Compile Include="Models\Misc.cs" />
+    <Compile Include="Core\CorePlayer.cs" />
+    <Compile Include="Core\CorePlayer.Events.cs" />
+    <Compile Include="Core\CorePlayer.Playlist.cs" />
+    <Compile Include="Core\CorePlayer.Tracks.cs" />
+    <Compile Include="Commands\Commands.cs" />
+    <Compile Include="Commands\Commands.Speed.cs" />
+    <Compile Include="Commands\Commands.Media.cs" />
     <Compile Include="Native\Native.cs" />
-    <Compile Include="Misc\Program.cs" />
+    <Compile Include="App\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WPF\ConfWindow.xaml.cs">
       <DependentUpon>ConfWindow.xaml</DependentUpon>
@@ -245,6 +256,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\input.conf.txt" />
+    <Content Include="Resources\mpv.conf.txt" />
+    <Content Include="Locale\zh\LC_MESSAGES\mpvnet.po">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Include="WPF\OptionSettingControl.xaml">

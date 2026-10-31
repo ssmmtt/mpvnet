@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,7 @@ namespace mpvnet
 {
     class GlobalHotkey
     {
-        public static Dictionary<int, string> Commands { get; set; }
+        public static Dictionary<int, string> Bindings { get; set; }
         static int ID;
         static IntPtr HWND;
 
@@ -70,12 +70,12 @@ namespace mpvnet
             else
                 vk = mpv_to_VK(key);
 
-            if (Commands == null)
-                Commands = new Dictionary<int, string>();
+            if (Bindings == null)
+                Bindings = new Dictionary<int, string>();
 
             if (vk > 0)
             {
-                Commands[ID] = command.Trim();
+                Bindings[ID] = command.Trim();
                 bool success = RegisterHotKey(HWND, ID++, mod, vk);
 
                 if (!success)
@@ -85,8 +85,29 @@ namespace mpvnet
 
         public static void Execute(int id)
         {
-            if (Commands.ContainsKey(id))
-                Core.Command(Commands[id]);
+            if (Bindings.ContainsKey(id))
+                Core.Command(Bindings[id]);
+        }
+
+        /// <summary>mpv key name or single char → Win32 VK. 0 if unknown.</summary>
+        public static int ParseVirtualKey(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+                return 0;
+
+            key = key.Trim().Trim('\'', '"');
+            int plus = key.LastIndexOf('+');
+            if (plus >= 0)
+                key = key.Substring(plus + 1);
+
+            if (key.Length == 1)
+            {
+                short result = VkKeyScanEx(key[0], GetKeyboardLayout(0));
+                int lo = result & 0xFF;
+                return lo > 0 ? lo : 0;
+            }
+
+            return mpv_to_VK(key);
         }
 
         static int mpv_to_VK(string value)

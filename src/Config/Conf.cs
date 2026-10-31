@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -61,6 +61,26 @@ namespace mpvnet
 
                 if (baseSetting.Help.ContainsEx("\\n"))
                     baseSetting.Help = baseSetting.Help.Replace("\\n", "\n");
+
+                // name stays English (conf key); translate UI-facing fields
+                if (!string.IsNullOrEmpty(baseSetting.Filter))
+                    baseSetting.Filter = I18n._(baseSetting.Filter);
+                if (!string.IsNullOrEmpty(baseSetting.Help))
+                    baseSetting.Help = I18n._(baseSetting.Help);
+
+                if (baseSetting is OptionSetting optSetting)
+                {
+                    foreach (var opt in optSetting.Options)
+                    {
+                        if (!string.IsNullOrEmpty(opt.Help))
+                            opt.Help = I18n._(opt.Help);
+                        if (!string.IsNullOrEmpty(opt.Text) && opt.Text.EndsWith(" (Default)"))
+                        {
+                            string name = opt.Name;
+                            opt.Text = name + " (" + I18n._("Default") + ")";
+                        }
+                    }
+                }
 
                 settingsList.Add(baseSetting);
             }

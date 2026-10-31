@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -36,10 +36,23 @@ namespace mpvnet
         int TaskbarButtonCreatedMessage;
 
         bool WasMaximized;
+        bool _closing;
+        public bool IsClosing => _closing;
+        bool _suspendWindowSave;
+        // Last user-intended top-left. Programmatic SetSize may clamp on-screen for
+        // display only — must not overwrite this or open/close drifts the anchor.
+        Point _anchorPosition;
+        bool _anchorValid;
+        bool _openRevealPending = true;
+
+        readonly HoldSpeedController HoldSpeed = new HoldSpeedController();
 
         public MainForm()
         {
             InitializeComponent();
+            // Hide first paint until OnLoad/VideoSizeChanged applies the real size.
+            // (Do not use SetVisibleCore — that broke startup earlier.)
+            Opacity = 0;
 
             try
             {
@@ -65,6 +78,9 @@ namespace mpvnet
 
                 TaskbarButtonCreatedMessage = RegisterWindowMessage("TaskbarButtonCreated");
 
+                // Size before position — position math uses Width/Height.
+                ApplyStartupClientSize();
+
                 if (Core.Screen > -1)
                 {
                     int targetIndex = Core.Screen;
@@ -85,20 +101,8 @@ namespace mpvnet
                 if (!Core.Border)
                     FormBorderStyle = FormBorderStyle.None;
 
-                Point pos = App.Settings.WindowPosition;
-
-                if ((pos.X != 0 || pos.Y != 0) && App.RememberWindowPosition)
-                {
-                    Left = pos.X - Width / 2;
-                    Top = pos.Y - Height / 2;
-
-                    Point location = App.Settings.WindowLocation;
-
-                    if (location.X == -1) Left = pos.X;
-                    if (location.X ==  1) Left = pos.X - Width;
-                    if (location.Y == -1) Top = pos.Y;
-                    if (location.Y ==  1) Top = pos.Y - Height;
-                }
+                if (App.RememberWindowPosition)
+                    RestoreWindowPosition();
 
                 if (Core.WindowMaximized)
                 {
@@ -190,6 +194,9 @@ namespace mpvnet
 
         void Core_ScaleWindow(float scale) {
             BeginInvoke(new Action(() => {
+                if (_closing || _openRevealPending)
+                    return;
+
                 int w, h;
 
                 if (KeepSize())
@@ -210,24 +217,35 @@ namespace mpvnet
         void Core_WindowScaleNET(float scale)
         {
             BeginInvoke(new Action(() => {
+                if (_closing || _openRevealPending)
+                    return;
+
                 SetSize(
                     (int)(Core.VideoSize.Width * scale),
                     (int)Math.Ceiling(Core.VideoSize.Height * scale),
-                    Screen.FromControl(this), false);
+                    Screen.FromControl(this), true);
                 Core.Command($"show-text \"window-scale {scale.ToString(CultureInfo.InvariantCulture)}\"");
             }));
         }
 
         void Core_WindowScaleMpv(double scale)
         {
-            if (!Core.Shown)
+            if (!Core.Shown || _closing || _openRevealPending)
+                return;
+
+            // video layout is owned by SetFormPosAndSize; mpv window-scale would
+            // re-apply raw video*scale and flash a full-res window.
+            if (App.StartSize == "video")
                 return;
 
             BeginInvoke(new Action(() => {
+                if (_closing || _openRevealPending || App.StartSize == "video")
+                    return;
+
                 SetSize(
                     (int)(Core.VideoSize.Width * scale),
                     (int)Math.Ceiling(Core.VideoSize.Height * scale),
-                    Screen.FromControl(this), false);
+                    Screen.FromControl(this), true);
             }));
         }
 
@@ -237,17 +255,73 @@ namespace mpvnet
 
         void Core_VideoSizeChanged(Size value) => BeginInvoke(new Action(() =>
         {
+            if (_closing)
+                return;
+
             if (!KeepSize())
                 SetFormPosAndSize();
+
+            RevealAfterLayout();
         }));
 
-        void PropChangeFullscreen(bool value) => BeginInvoke(new Action(() => CycleFullscreen(value)));
+        void RevealAfterLayout()
+        {
+            if (!_openRevealPending || _closing)
+                return;
+
+            _openRevealPending = false;
+            Opacity = 1;
+        }
+
+        void PropChangeFullscreen(bool value) => BeginInvoke(new Action(() =>
+        {
+            if (_closing)
+                return;
+            CycleFullscreen(value);
+        }));
 
         bool IsFullscreen => WindowState == FormWindowState.Maximized && FormBorderStyle == FormBorderStyle.None;
 
         bool IsCommandPaletteVissible() => CommandPaletteHost != null && CommandPaletteHost.Visible;
 
         bool KeepSize() => App.StartSize == "session" || App.StartSize == "always";
+
+        // video: size follows media (not persisted). always*: size from settings.
+        // session*: in-process only via WasInitialSizeSet — do not restore from disk.
+        bool RememberWindowSize() =>
+            App.StartSize == "always" ||
+            App.StartSize == "height-always" ||
+            App.StartSize == "width-always";
+
+        void ApplyStartupClientSize()
+        {
+            _suspendWindowSave = true;
+            try
+            {
+                if (App.StartSize == "video")
+                {
+                    // Default window before media; SetFormPosAndSize replaces once VideoSize is known.
+                    Screen screen = Screen.FromControl(this);
+                    int h = Convert.ToInt32(GetWorkingArea(Handle, screen.WorkingArea).Height * Core.Autofit);
+                    if (h < 1) h = 360;
+                    ClientSize = new Size((int)(h * (16 / 9f)), h);
+                    return;
+                }
+
+                if (!RememberWindowSize())
+                    return;
+
+                Size saved = App.Settings.WindowSize;
+                if (saved.Width <= 0 || saved.Height <= 0)
+                    return;
+
+                ClientSize = saved;
+            }
+            finally
+            {
+                _suspendWindowSave = false;
+            }
+        }
 
         bool IsMouseInOSC()
         {
@@ -262,69 +336,82 @@ namespace mpvnet
 
         void UpdateMenu()
         {
-            Core.UpdateExternalTracks();
-
-            lock (Core.MediaTracksLock)
+            // Don't block menu open if track refresh is still running (e.g. slow MediaInfo).
+            if (Monitor.TryEnter(Core.MediaTracksLock, 200))
             {
-                var trackMenuItem = FindMenuItem("Track");
-
-                if (trackMenuItem != null)
+                try
                 {
-                    trackMenuItem.Items.Clear();
+                    Core.UpdateExternalTracksUnlocked();
 
-                    var audTracks = Core.MediaTracks.Where(track => track.Type == "a");
-                    var subTracks = Core.MediaTracks.Where(track => track.Type == "s");
-                    var vidTracks = Core.MediaTracks.Where(track => track.Type == "v");
-                    var ediTracks = Core.MediaTracks.Where(track => track.Type == "e");
+                    var audTracks = Core.MediaTracks.Where(track => track.Type == "a").ToList();
+                    var subTracks = SubtitleTrackUi.OrderSubtitleTracksForUi(
+                        Core.MediaTracks.Where(track => track.Type == "s"));
+                    var vidTracks = Core.MediaTracks.Where(track => track.Type == "v").ToList();
+                    var ediTracks = Core.MediaTracks.Where(track => track.Type == "e").ToList();
 
-                    foreach (MediaTrack track in vidTracks)
+                    var trackMenuItem = FindMenuItem("Track");
+
+                    if (trackMenuItem != null)
                     {
-                        var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
-                        mi.Click += (sender, args) => Core.CommandV("set", "vid", track.ID.ToString());
-                        mi.IsChecked = Core.VID == track.ID.ToString();
-                        trackMenuItem.Items.Add(mi);
+                        trackMenuItem.Items.Clear();
+
+                        foreach (MediaTrack track in vidTracks)
+                        {
+                            var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
+                            mi.Click += (sender, args) => Core.CommandV("set", "vid", track.ID.ToString());
+                            mi.IsChecked = Core.VID == track.ID.ToString();
+                            trackMenuItem.Items.Add(mi);
+                        }
+
+                        if (vidTracks.Count > 0)
+                            trackMenuItem.Items.Add(new WpfControls.Separator());
+
+                        foreach (MediaTrack track in audTracks)
+                        {
+                            var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
+                            mi.Click += (sender, args) => Core.CommandV("set", "aid", track.ID.ToString());
+                            mi.IsChecked = Core.AID == track.ID.ToString();
+                            trackMenuItem.Items.Add(mi);
+                        }
+
+                        if (subTracks.Count > 0)
+                            trackMenuItem.Items.Add(new WpfControls.Separator());
+
+                        foreach (MediaTrack track in subTracks)
+                        {
+                            var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
+                            mi.Click += (sender, args) => Core.CommandV("set", "sid", track.ID.ToString());
+                            mi.IsChecked = Core.SID == track.ID.ToString();
+                            trackMenuItem.Items.Add(mi);
+                        }
+
+                        if (subTracks.Count > 0)
+                        {
+                            var mi = new WpfControls.MenuItem() { Header = I18n._("No subtitles") };
+                            mi.Click += (sender, args) => Core.CommandV("set", "sid", "no");
+                            mi.IsChecked = Core.SID == "no";
+                            trackMenuItem.Items.Add(mi);
+                        }
+
+                        if (ediTracks.Count > 0)
+                            trackMenuItem.Items.Add(new WpfControls.Separator());
+
+                        foreach (MediaTrack track in ediTracks)
+                        {
+                            var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
+                            mi.Click += (sender, args) => Core.CommandV("set", "edition", track.ID.ToString());
+                            mi.IsChecked = Core.Edition == track.ID;
+                            trackMenuItem.Items.Add(mi);
+                        }
                     }
 
-                    if (vidTracks.Count() > 0)
-                        trackMenuItem.Items.Add(new WpfControls.Separator());
-
-                    foreach (MediaTrack track in audTracks)
-                    {
-                        var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
-                        mi.Click += (sender, args) => Core.CommandV("set", "aid", track.ID.ToString());
-                        mi.IsChecked = Core.AID == track.ID.ToString();
-                        trackMenuItem.Items.Add(mi);
-                    }
-
-                    if (subTracks.Count() > 0)
-                        trackMenuItem.Items.Add(new WpfControls.Separator());
-
-                    foreach (MediaTrack track in subTracks)
-                    {
-                        var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
-                        mi.Click += (sender, args) => Core.CommandV("set", "sid", track.ID.ToString());
-                        mi.IsChecked = Core.SID == track.ID.ToString();
-                        trackMenuItem.Items.Add(mi);
-                    }
-
-                    if (subTracks.Count() > 0)
-                    {
-                        var mi = new WpfControls.MenuItem() { Header = "S: No subtitles" };
-                        mi.Click += (sender, args) => Core.CommandV("set", "sid", "no");
-                        mi.IsChecked = Core.SID == "no";
-                        trackMenuItem.Items.Add(mi);
-                    }
-
-                    if (ediTracks.Count() > 0)
-                        trackMenuItem.Items.Add(new WpfControls.Separator());
-
-                    foreach (MediaTrack track in ediTracks)
-                    {
-                        var mi = new WpfControls.MenuItem() { Header = track.Text.Replace("_", "__") };
-                        mi.Click += (sender, args) => Core.CommandV("set", "edition", track.ID.ToString());
-                        mi.IsChecked = Core.Edition == track.ID;
-                        trackMenuItem.Items.Add(mi);
-                    }
+                    // List every track under Audio / Subtitle (not just Cycle/Next).
+                    TrackListMenuBuilder.Fill(FindMenuItem("Audio"), audTracks, "aid", Core.AID, null);
+                    TrackListMenuBuilder.Fill(FindMenuItem("Subtitle"), subTracks, "sid", Core.SID, "No subtitles");
+                }
+                finally
+                {
+                    Monitor.Exit(Core.MediaTracksLock);
                 }
             }
 
@@ -360,7 +447,7 @@ namespace mpvnet
                 }
 
                 recentMenuItem.Items.Add(new WpfControls.Separator());
-                var clearMenuItem = new WpfControls.MenuItem() { Header = "Clear List" };
+                var clearMenuItem = new WpfControls.MenuItem() { Header = I18n._("Clear List") };
                 clearMenuItem.Click += (sender, args) => App.Settings.RecentFiles.Clear();
                 recentMenuItem.Items.Add(clearMenuItem);
             }
@@ -422,7 +509,7 @@ namespace mpvnet
             }
         }
 
-        public WpfControls.MenuItem FindMenuItem(string text) => FindMenuItem(text, ContextMenu.Items);
+        public WpfControls.MenuItem FindMenuItem(string text) => FindMenuItem(I18n._(text), ContextMenu.Items);
 
         WpfControls.MenuItem FindMenuItem(string text, WpfControls.ItemCollection items)
         {
@@ -459,6 +546,19 @@ namespace mpvnet
                 }
             }
 
+            _suspendWindowSave = true;
+            try
+            {
+                SetFormPosAndSizeCore(force, checkAutofit);
+            }
+            finally
+            {
+                _suspendWindowSave = false;
+            }
+        }
+
+        void SetFormPosAndSizeCore(bool force, bool checkAutofit)
+        {
             Screen screen = Screen.FromControl(this);
             Rectangle workingArea = GetWorkingArea(Handle, screen.WorkingArea);
             int autoFitHeight = Convert.ToInt32(workingArea.Height * Core.Autofit);
@@ -469,6 +569,9 @@ namespace mpvnet
             if (Core.IsAudio) autoFitHeight = Convert.ToInt32(workingArea.Height * App.AutofitAudio);
             if (Core.IsImage) autoFitHeight = Convert.ToInt32(workingArea.Height * App.AutofitImage);
 
+            Size windowSize = App.Settings.WindowSize;
+
+            // Upstream: unknown media → autofit 16:9 placeholder; always* then overrides below.
             if (Core.VideoSize.Height == 0 || Core.VideoSize.Width == 0)
                 Core.VideoSize = new Size((int)(autoFitHeight * (16 / 9f)), autoFitHeight);
 
@@ -505,8 +608,6 @@ namespace mpvnet
             }
             else
             {
-                Size windowSize = App.Settings.WindowSize;
-
                 if (App.StartSize == "height-always" && windowSize.Height != 0)
                 {
                     height = windowSize.Height;
@@ -517,7 +618,7 @@ namespace mpvnet
                     height = autoFitHeight;
                     width = height * videoSize.Width / videoSize.Height;
                 }
-                else if(App.StartSize == "width-always" && windowSize.Height != 0)
+                else if (App.StartSize == "width-always" && windowSize.Width != 0)
                 {
                     width = windowSize.Width;
                     height = (int)Math.Ceiling(width * videoSize.Height / (double)videoSize.Width);
@@ -582,20 +683,39 @@ namespace mpvnet
                 width = Convert.ToInt32(height * startWidth / (double)startHeight);
             }
 
-            Point middlePos = new Point(Left + Width / 2, Top + Height / 2);
             var rect = new RECT(new Rectangle(screen.Bounds.X, screen.Bounds.Y, width, height));
             AddWindowBorders(Handle, ref rect, GetDPI(Handle));
 
-            int left = middlePos.X - rect.Width / 2;
-            int top = middlePos.Y - rect.Height / 2;
+            // Remember-position: pin to user anchor (not live Left after prior clamps).
+            // Otherwise grow/shrink around the center.
+            int left, top;
+            bool pinAnchor = App.RememberWindowPosition && _anchorValid;
+            if (pinAnchor)
+            {
+                left = _anchorPosition.X;
+                top = _anchorPosition.Y;
+            }
+            else if (App.RememberWindowPosition)
+            {
+                left = Left;
+                top = Top;
+            }
+            else
+            {
+                Point middlePos = new Point(Left + Width / 2, Top + Height / 2);
+                left = middlePos.X - rect.Width / 2;
+                top = middlePos.Y - rect.Height / 2;
 
-            Rectangle currentRect = new Rectangle(Left, Top, Width, Height);
+                // Legacy edge flush only when not pinning a remembered anchor.
+                int hLoc = GetHorizontalLocation(screen);
+                int vLoc = GetVerticalLocation(screen);
 
-            if (GetHorizontalLocation(screen) == -1) left = Left;
-            if (GetHorizontalLocation(screen) ==  1) left = currentRect.Right - rect.Width;
+                if (hLoc == -1) left = workingArea.Left;
+                else if (hLoc == 1) left = workingArea.Right - rect.Width;
 
-            if (GetVerticalLocation(screen) == -1) top = Top;
-            if (GetVerticalLocation(screen) ==  1) top = currentRect.Bottom - rect.Height;
+                if (vLoc == -1) top = workingArea.Top;
+                else if (vLoc == 1) top = workingArea.Bottom - rect.Height;
+            }
 
             Screen[] screens = Screen.AllScreens;
 
@@ -604,6 +724,7 @@ namespace mpvnet
             int minTop    = screens.Select(val => GetWorkingArea(Handle, val.WorkingArea).Y).Min();
             int maxBottom = screens.Select(val => GetWorkingArea(Handle, val.WorkingArea).Bottom).Max();
 
+            // Display clamp only — do not write back into _anchorPosition.
             if (left < minLeft)
                 left = minLeft;
 
@@ -616,8 +737,17 @@ namespace mpvnet
             if (top + rect.Height > maxBottom)
                 top = maxBottom - rect.Height;
 
-            uint SWP_NOACTIVATE = 0x0010;
-            SetWindowPos(Handle, IntPtr.Zero, left, top, rect.Width, rect.Height, SWP_NOACTIVATE);
+            bool wasSuspended = _suspendWindowSave;
+            _suspendWindowSave = true;
+            try
+            {
+                uint SWP_NOACTIVATE = 0x0010;
+                SetWindowPos(Handle, IntPtr.Zero, left, top, rect.Width, rect.Height, SWP_NOACTIVATE);
+            }
+            finally
+            {
+                _suspendWindowSave = wasSuspended;
+            }
         }
 
         public void CycleFullscreen(bool enabled)
@@ -666,6 +796,7 @@ namespace mpvnet
             }
         }
 
+        /// <summary>Only true edge contact (±8px). No "mostly left/right" heuristics.</summary>
         public int GetHorizontalLocation(Screen screen)
         {
             Rectangle workingArea = GetWorkingArea(Handle, screen.WorkingArea);
@@ -674,15 +805,16 @@ namespace mpvnet
             if (workingArea.Width / (float)Width < 1.1)
                 return 0;
 
-            if (rect.X * 3 < workingArea.Width - rect.Right)
+            const int edgeTolerance = 8;
+            if (Math.Abs(rect.X) <= edgeTolerance)
                 return -1;
-
-            if (rect.X > (workingArea.Width - rect.Right) * 3)
+            if (Math.Abs(workingArea.Width - rect.Right) <= edgeTolerance)
                 return 1;
 
             return 0;
         }
 
+        /// <summary>Only true edge contact (±8px). No "mostly top/bottom" heuristics.</summary>
         public int GetVerticalLocation(Screen screen)
         {
             Rectangle workingArea = GetWorkingArea(Handle, screen.WorkingArea);
@@ -691,10 +823,10 @@ namespace mpvnet
             if (workingArea.Height / (float)Height < 1.1)
                 return 0;
 
-            if (rect.Y * 3 < workingArea.Height - rect.Bottom)
+            const int edgeTolerance = 8;
+            if (Math.Abs(rect.Y) <= edgeTolerance)
                 return -1;
-
-            if (rect.Y > (workingArea.Height - rect.Bottom) * 3)
+            if (Math.Abs(workingArea.Height - rect.Bottom) <= edgeTolerance)
                 return 1;
 
             return 0;
@@ -730,7 +862,8 @@ namespace mpvnet
                 }
                 else
                 {
-                    var menuItem = MenuHelp.Add(ContextMenu.Items, tempItem.Path);             
+                    string menuPath = I18n.TranslateMenuPath(tempItem.Path);
+                    var menuItem = MenuHelp.Add(ContextMenu.Items, menuPath);
 
                     if (menuItem != null)
                     {
@@ -795,6 +928,7 @@ namespace mpvnet
                 while (App.Settings.RecentFiles.Count > App.RecentCount)
                     App.Settings.RecentFiles.RemoveAt(App.RecentCount);
             }
+
         }
 
         void SetTitle() => BeginInvoke(new Action(() => SetTitleInternal()));
@@ -822,28 +956,79 @@ namespace mpvnet
 
         void SaveWindowProperties()
         {
-            if (WindowState == FormWindowState.Normal && Core.Shown)
-            {
-                SavePosition();
+            if (_suspendWindowSave || _closing)
+                return;
+
+            if (WindowState != FormWindowState.Normal || !Core.Shown)
+                return;
+
+            CommitAnchorFromWindow();
+            if (RememberWindowSize())
                 App.Settings.WindowSize = ClientSize;
-            }
         }
 
-        void SavePosition()
+        void CommitAnchorFromWindow()
         {
-            Point pos = new Point(Left + Width / 2, Top + Height / 2);
-            Screen screen = Screen.FromControl(this);
+            _anchorPosition = new Point(Left, Top);
+            _anchorValid = true;
+            App.Settings.WindowPosition = _anchorPosition;
+            App.Settings.WindowLocation = Point.Empty;
+        }
 
-            int x = GetHorizontalLocation(screen);
-            int y = GetVerticalLocation(screen);
+        void PersistWindowSettings()
+        {
+            if (WindowState != FormWindowState.Normal)
+                return;
 
-            if (x == -1) pos.X = Left;
-            if (x ==  1) pos.X = Left + Width;
-            if (y == -1) pos.Y = Top;
-            if (y ==  1) pos.Y = Top + Height;
+            if (_anchorValid)
+                App.Settings.WindowPosition = _anchorPosition;
+            else if (Core.Shown)
+                App.Settings.WindowPosition = new Point(Left, Top);
 
-            App.Settings.WindowPosition = pos;
-            App.Settings.WindowLocation = new Point(x, y);
+            App.Settings.WindowLocation = Point.Empty;
+
+            // Only always* persist size; video/session must not leave a stale WindowSize.
+            if (RememberWindowSize())
+                App.Settings.WindowSize = ClientSize;
+            else
+                App.Settings.WindowSize = Size.Empty;
+        }
+
+        void RestoreWindowPosition()
+        {
+            Point pos = App.Settings.WindowPosition;
+            // (0,0) is the unset sentinel from a fresh settings.xml.
+            if (pos.X == 0 && pos.Y == 0)
+                return;
+
+            _anchorPosition = pos;
+            _anchorValid = true;
+
+            _suspendWindowSave = true;
+            try
+            {
+                Left = pos.X;
+                Top = pos.Y;
+
+                // Display-only clamp; anchor stays at saved coords.
+                Screen screen = Screen.FromControl(this);
+                Rectangle wa = GetWorkingArea(Handle, screen.WorkingArea);
+                int left = Left, top = Top;
+                if (left + Width > wa.Right)
+                    left = wa.Right - Width;
+                if (top + Height > wa.Bottom)
+                    top = wa.Bottom - Height;
+                if (left < wa.Left)
+                    left = wa.Left;
+                if (top < wa.Top)
+                    top = wa.Top;
+                Left = left;
+                Top = top;
+            }
+            finally
+            {
+                _suspendWindowSave = false;
+            }
         }
 
         protected override CreateParams CreateParams {
@@ -877,6 +1062,21 @@ namespace mpvnet
                 case 0x101: // WM_KEYUP
                 case 0x104: // WM_SYSKEYDOWN
                 case 0x105: // WM_SYSKEYUP
+                    if (App.HoldSpeedRight > 1 && App.HoldSpeedVk > 0 && (int)m.WParam == App.HoldSpeedVk)
+                    {
+                        bool isDown = m.Msg == 0x100 || m.Msg == 0x104;
+                        if (isDown)
+                        {
+                            bool isRepeat = (m.LParam.ToInt64() & (1L << 30)) != 0;
+                            HoldSpeed.OnKeyDown(isRepeat);
+                        }
+                        else
+                            HoldSpeed.OnKeyUp();
+
+                        m.Result = IntPtr.Zero;
+                        return;
+                    }
+                    goto case 0x201;
                 case 0x201: // WM_LBUTTONDOWN
                 case 0x202: // WM_LBUTTONUP
                 case 0x204: // WM_RBUTTONDOWN
@@ -1089,11 +1289,14 @@ namespace mpvnet
         
         void PropChangeWindowMaximized()
         {
-            if (!Core.Shown)
+            if (!Core.Shown || _closing)
                 return;
 
             BeginInvoke(new Action(() =>
             {
+                if (_closing)
+                    return;
+
                 Core.WindowMaximized = Core.GetPropertyBool("window-maximized");
 
                 if (Core.WindowMaximized && WindowState != FormWindowState.Maximized)
@@ -1105,11 +1308,14 @@ namespace mpvnet
 
         void PropChangeWindowMinimized()
         {
-            if (!Core.Shown)
+            if (!Core.Shown || _closing)
                 return;
 
             BeginInvoke(new Action(() =>
             {
+                if (_closing)
+                    return;
+
                 Core.WindowMinimized = Core.GetPropertyBool("window-minimized");
 
                 if (Core.WindowMinimized && WindowState != FormWindowState.Minimized)
@@ -1123,14 +1329,14 @@ namespace mpvnet
             Core.Border = enabled;
 
             BeginInvoke(new Action(() => {
-                if (!IsFullscreen)
-                {
-                    if (Core.Border && FormBorderStyle == FormBorderStyle.None)
-                        FormBorderStyle = FormBorderStyle.Sizable;
+                if (_closing || IsFullscreen)
+                    return;
 
-                    if (!Core.Border && FormBorderStyle == FormBorderStyle.Sizable)
-                        FormBorderStyle = FormBorderStyle.None;
-                }
+                if (Core.Border && FormBorderStyle == FormBorderStyle.None)
+                    FormBorderStyle = FormBorderStyle.Sizable;
+
+                if (!Core.Border && FormBorderStyle == FormBorderStyle.Sizable)
+                    FormBorderStyle = FormBorderStyle.None;
             }));
         }
 
@@ -1148,12 +1354,29 @@ namespace mpvnet
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            // Short wait only — long WaitOne on UI thread looks like "未响应".
             if (Core.GPUAPI != "vulkan")
-                Core.VideoSizeAutoResetEvent.WaitOne(App.StartThreshold);
+                Core.VideoSizeAutoResetEvent.WaitOne(Math.Min(App.StartThreshold, 400));
             LastCycleFullscreen = Environment.TickCount;
             SetFormPosAndSize();
-            if (Core.PlaylistPos == -1)
-                Core.ShowLogo();
+
+            if (Core.VideoSize.Width > 0 && Core.VideoSize.Height > 0)
+                RevealAfterLayout();
+            else
+            {
+                // Idle / slow probe: show soon so the window is not stuck invisible.
+                var timer = new System.Windows.Forms.Timer { Interval = 200 };
+                timer.Tick += (s, ev) =>
+                {
+                    timer.Stop();
+                    timer.Dispose();
+                    if (_closing)
+                        return;
+                    SetFormPosAndSize();
+                    RevealAfterLayout();
+                };
+                timer.Start();
+            }
         }
 
         protected override void OnActivated(EventArgs e)
@@ -1189,6 +1412,10 @@ namespace mpvnet
             App.RunTask(() => App.CopyMpvnetCom());
             CSharpScriptHost.ExecuteScriptsInFolder(Core.ConfigFolder + "scripts-cs");
             Core.Shown = true;
+            // Logo uses ClientRectangle; OnLoad runs before final size settles.
+            if (Core.PlaylistPos == -1)
+                Core.ShowLogo();
+            ResumeLastPlayback.MaybeStart();
         }
 
         void ContextMenu_Closed(object sender, System.Windows.RoutedEventArgs e)
@@ -1199,7 +1426,7 @@ namespace mpvnet
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            SaveWindowProperties();
+            SaveWindowProperties(); // no-op while _suspendWindowSave (programmatic SetSize)
 
             if (Core.PlaylistPos == -1 && Core.Shown)
                 Core.ShowLogo();
@@ -1229,6 +1456,16 @@ namespace mpvnet
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
+
+            // Persist user anchor before quit; ignore later size/scale/logo callbacks.
+            _closing = true;
+            Core.Shown = false;
+            PersistWindowSettings();
+
+            // Hide before mpv tears down the VO — otherwise a blank/white small
+            // window can flash when playlist clears and the swapchain is destroyed.
+            try { Opacity = 0; }
+            catch { }
 
             if (Core.IsQuitNeeded)
                 Core.CommandV("quit");

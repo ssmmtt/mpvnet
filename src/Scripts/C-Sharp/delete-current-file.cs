@@ -3,10 +3,7 @@
 
 // In input.conf add:
 
-// KP0 script-message delete-current-file delete   #menu: Script > Delete current file > Delete
 //   0 script-message delete-current-file delete   #menu: Script > Delete current file > Delete
-
-// KP1 script-message delete-current-file confirm  #menu: Script > Delete current file > Confirm
 //   1 script-message delete-current-file confirm  #menu: Script > Delete current file > Confirm
 
 using System;

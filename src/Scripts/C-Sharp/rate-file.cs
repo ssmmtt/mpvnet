@@ -3,12 +3,12 @@
 
 // In input.conf add:
 
-// KP0 script-message rate-file 0     #menu: Script > Rating > 0stars
-// KP1 script-message rate-file 1     #menu: Script > Rating > 1stars
-// KP2 script-message rate-file 2     #menu: Script > Rating > 2stars
-// KP3 script-message rate-file 3     #menu: Script > Rating > 3stars
-// KP4 script-message rate-file 4     #menu: Script > Rating > 4stars
-// KP5 script-message rate-file 5     #menu: Script > Rating > 5stars
+// _ script-message rate-file 0     #menu: Script > Rating > 0stars
+// _ script-message rate-file 1     #menu: Script > Rating > 1stars
+// _ script-message rate-file 2     #menu: Script > Rating > 2stars
+// _ script-message rate-file 3     #menu: Script > Rating > 3stars
+// _ script-message rate-file 4     #menu: Script > Rating > 4stars
+// _ script-message rate-file 5     #menu: Script > Rating > 5stars
 
 using System;
 using System.Collections.Generic;
