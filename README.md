@@ -4,7 +4,7 @@
 🎞 mpvnet
 =========
 
-> **本仓库说明：** 本项目基于开源项目 [mpv.net](https://github.com/mpvnet-player/mpv.net) 的 `v6.0.4.0-stable` 进行修改与续维护，原项目采用 [GPL-2.0](License.txt) 许可。向原作者 Frank Skare（stax76）及贡献者致谢。本仓库为个人维护构建，**不提供 issue 支持**。
+> **本仓库说明：** 本项目基于开源项目 [mpv.net](https://github.com/mpvnet-player/mpv.net) 的 `v6.0.4.0-stable` 进行修改与续维护，原项目采用 [GPL-2.0](License.txt) 许可。向原作者 Frank Skare（stax76）及贡献者致谢。本仓库为个人维护构建。
 
 mpv.net is a modern desktop media player for Windows based on the popular [mpv](https://mpv.io) player.
 
