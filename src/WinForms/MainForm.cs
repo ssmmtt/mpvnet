@@ -344,8 +344,10 @@ namespace mpvnet
                     Core.UpdateExternalTracksUnlocked();
 
                     var audTracks = Core.MediaTracks.Where(track => track.Type == "a").ToList();
+                    string[] subPrefs = SubtitleTrackUi.ParsePreferenceList(
+                        Core.Conf.TryGetValue("slang", out string slangRaw) ? slangRaw : null);
                     var subTracks = SubtitleTrackUi.OrderSubtitleTracksForUi(
-                        Core.MediaTracks.Where(track => track.Type == "s"));
+                        Core.MediaTracks.Where(track => track.Type == "s"), subPrefs);
                     var vidTracks = Core.MediaTracks.Where(track => track.Type == "v").ToList();
                     var ediTracks = Core.MediaTracks.Where(track => track.Type == "e").ToList();
 

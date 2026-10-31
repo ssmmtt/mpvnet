@@ -9,12 +9,52 @@ namespace mpvnet
     /// <summary>Subtitle prefer/sort/watch-later helpers and language labels for UI.</summary>
     public static class SubtitleTrackUi
     {
-        public static readonly string[] SimplifiedSubPrefer = {
-            "chs", "sc", "zh-hans", "zh-cn", "简体", "简中", "简日", "简英", "simplified"
-        };
-        public static readonly string[] TraditionalSubAvoid = {
-            "cht", "tc", "zh-hant", "zh-tw", "zh-hk", "繁体", "繁體", "繁中", "繁日", "繁英", "traditional"
-        };
+        /// <summary>Split conf subtitle-language priority list: "a, b,c" → ["a","b","c"].</summary>
+        public static string[] ParsePreferenceList(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+                return new string[0];
+
+            string s = raw.Trim().Trim('\'', '"');
+            var list = new List<string>();
+            foreach (string part in s.Split(','))
+            {
+                string t = part.Trim().Trim('\'', '"');
+                if (t.Length > 0)
+                    list.Add(t);
+            }
+            return list.ToArray();
+        }
+
+        /// <summary>
+        /// Walk conf subtitle-language priority in order; first key that matches any
+        /// sub track wins (lang or title). 0 = no match.
+        /// </summary>
+        public static int FindSidByPreferenceOrder(
+            string[] preferenceKeys,
+            IList<Tuple<int, string, string>> subTracks)
+        {
+            if (preferenceKeys == null || preferenceKeys.Length == 0 || subTracks == null)
+                return 0;
+
+            foreach (string key in preferenceKeys)
+            {
+                if (string.IsNullOrEmpty(key))
+                    continue;
+
+                for (int i = 0; i < subTracks.Count; i++)
+                {
+                    var t = subTracks[i];
+                    string hay = ((t.Item2 ?? "") + " " + (t.Item3 ?? "")).Trim();
+                    if (hay.Length == 0)
+                        continue;
+                    if (TrackTextMatchesKeys(hay, new[] { key }))
+                        return t.Item1;
+                }
+            }
+
+            return 0;
+        }
 
         public static bool WatchLaterHasSid(string configFolder, string path)
         {
@@ -65,71 +105,41 @@ namespace mpvnet
         }
 
         /// <summary>
-        /// UI-language subtitle tracks first; relative order kept within each group.
-        /// For zh UI, simplified Chinese is ahead of other Chinese tracks.
+        /// Tracks matching conf subtitle-language priority first (that list's order),
+        /// then the rest. Falls back to UI-language keys if preferenceKeys empty.
         /// </summary>
-        public static List<MediaTrack> OrderSubtitleTracksForUi(IEnumerable<MediaTrack> tracks)
+        public static List<MediaTrack> OrderSubtitleTracksForUi(
+            IEnumerable<MediaTrack> tracks, string[] preferenceKeys = null)
         {
-            string[] keys = UiLanguageMatchKeys();
-            var match = new List<MediaTrack>();
-            var rest = new List<MediaTrack>();
+            string[] keys = (preferenceKeys != null && preferenceKeys.Length > 0)
+                ? preferenceKeys
+                : UiLanguageMatchKeys();
+
+            var ordered = new List<MediaTrack>();
+            var used = new HashSet<MediaTrack>();
+
+            foreach (string key in keys)
+            {
+                if (string.IsNullOrEmpty(key))
+                    continue;
+                foreach (MediaTrack t in tracks)
+                {
+                    if (used.Contains(t))
+                        continue;
+                    if (!TrackTextMatchesKeys(t.Text, new[] { key }))
+                        continue;
+                    ordered.Add(t);
+                    used.Add(t);
+                }
+            }
 
             foreach (MediaTrack t in tracks)
             {
-                if (TrackTextMatchesKeys(t.Text, keys))
-                    match.Add(t);
-                else
-                    rest.Add(t);
+                if (!used.Contains(t))
+                    ordered.Add(t);
             }
 
-            if (I18n.Language == "zh")
-                match = PreferSimplifiedSubtitleOrder(match);
-
-            match.AddRange(rest);
-            return match;
-        }
-
-        public static List<MediaTrack> PreferSimplifiedSubtitleOrder(List<MediaTrack> chineseTracks)
-        {
-            var simp = new List<MediaTrack>();
-            var other = new List<MediaTrack>();
-
-            foreach (MediaTrack t in chineseTracks)
-            {
-                string h = (t.Text ?? "").ToLowerInvariant();
-                bool trad = false;
-                foreach (string a in TraditionalSubAvoid)
-                {
-                    if (h.IndexOf(a.ToLowerInvariant(), StringComparison.Ordinal) >= 0)
-                    {
-                        trad = true;
-                        break;
-                    }
-                }
-
-                bool simplified = false;
-                if (!trad)
-                {
-                    foreach (string a in SimplifiedSubPrefer)
-                    {
-                        if (h.IndexOf(a.ToLowerInvariant(), StringComparison.Ordinal) >= 0)
-                        {
-                            simplified = true;
-                            break;
-                        }
-                    }
-                    if (!simplified && (h.Contains("简体") || h.Contains("简中")))
-                        simplified = true;
-                }
-
-                if (simplified)
-                    simp.Add(t);
-                else
-                    other.Add(t);
-            }
-
-            simp.AddRange(other);
-            return simp;
+            return ordered;
         }
 
         public static string[] UiLanguageMatchKeys()

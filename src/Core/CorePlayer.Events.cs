@@ -121,7 +121,7 @@ namespace mpvnet
                                     VideoSizeAutoResetEvent.Set();
                                 }
 
-                                PreferSimplifiedSubtitle();
+                                PreferSubtitleBySlang();
                                 App.RunTask(new Action(() => UpdateTracks()));
 
                                 InvokeEvent(FileLoaded, FileLoadedAsync);

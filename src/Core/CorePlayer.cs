@@ -818,7 +818,8 @@ namespace mpvnet
         readonly HashSet<string> AutoSubPreferTried =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        void PreferSimplifiedSubtitle()
+        // mpv.conf 字幕语言优先级（slang）：按列表顺序依次匹配 lang/title。
+        void PreferSubtitleBySlang()
         {
             try
             {
@@ -832,47 +833,28 @@ namespace mpvnet
                 if (SubtitleTrackUi.WatchLaterHasSid(ConfigFolder, path))
                     return;
 
-                int count = GetPropertyInt("track-list/count");
-                int bestId = -1;
-                int bestScore = 0;
+                string raw;
+                if (!Conf.TryGetValue("slang", out raw) || string.IsNullOrWhiteSpace(raw))
+                    return;
 
+                string[] prefs = SubtitleTrackUi.ParsePreferenceList(raw);
+                if (prefs.Length == 0)
+                    return;
+
+                int count = GetPropertyInt("track-list/count");
+                var subs = new List<Tuple<int, string, string>>();
                 for (int i = 0; i < count; i++)
                 {
                     if (GetPropertyString($"track-list/{i}/type") != "sub")
                         continue;
 
+                    int id = GetPropertyInt($"track-list/{i}/id");
                     string lang = GetPropertyString($"track-list/{i}/lang") ?? "";
                     string title = GetPropertyString($"track-list/{i}/title") ?? "";
-                    string hay = (lang + " " + title).ToLowerInvariant();
-
-                    bool avoid = false;
-                    foreach (string a in SubtitleTrackUi.TraditionalSubAvoid)
-                    {
-                        if (hay.IndexOf(a.ToLowerInvariant(), StringComparison.Ordinal) >= 0)
-                        {
-                            avoid = true;
-                            break;
-                        }
-                    }
-                    if (avoid)
-                        continue;
-
-                    int score = 0;
-                    for (int p = 0; p < SubtitleTrackUi.SimplifiedSubPrefer.Length; p++)
-                    {
-                        if (hay.IndexOf(SubtitleTrackUi.SimplifiedSubPrefer[p].ToLowerInvariant(), StringComparison.Ordinal) >= 0)
-                        {
-                            score = SubtitleTrackUi.SimplifiedSubPrefer.Length - p;
-                            break;
-                        }
-                    }
-                    if (score > bestScore)
-                    {
-                        bestScore = score;
-                        bestId = GetPropertyInt($"track-list/{i}/id");
-                    }
+                    subs.Add(Tuple.Create(id, lang, title));
                 }
 
+                int bestId = SubtitleTrackUi.FindSidByPreferenceOrder(prefs, subs);
                 if (bestId > 0)
                     SetPropertyInt("sid", bestId);
             }

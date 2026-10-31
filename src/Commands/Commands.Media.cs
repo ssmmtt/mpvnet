@@ -125,8 +125,10 @@ namespace mpvnet
 
             lock (Core.MediaTracksLock)
             {
+                string[] subPrefs = SubtitleTrackUi.ParsePreferenceList(
+                    Core.Conf.TryGetValue("slang", out string slangRaw) ? slangRaw : null);
                 MediaTrack[] tracks = SubtitleTrackUi.OrderSubtitleTracksForUi(
-                    Core.MediaTracks.Where(track => track.Type == "s")).ToArray();
+                    Core.MediaTracks.Where(track => track.Type == "s"), subPrefs).ToArray();
 
                 if (tracks.Length < 1)
                 {
