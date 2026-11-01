@@ -63,7 +63,26 @@ namespace mpvnet
             if (editor)
                 ShowTextWithEditor("media-info", text);
             else if (osd)
-                ShowText(text.Replace("\r", ""), 5000, 16);
+            {
+                string osdText = text.Replace("\r", "");
+                int lines = MediaInfoOsdLineEstimate(osdText);
+
+                int oh = Core.GetPropertyInt("osd-height");
+                if (oh < 1)
+                    oh = Core.GetPropertyInt("dheight");
+                try
+                {
+                    if (MainForm.Instance != null)
+                    {
+                        int ch = MainForm.Instance.ClientSize.Height;
+                        if (ch > 50)
+                            oh = oh > 0 ? Math.Min(oh, ch) : ch;
+                    }
+                }
+                catch { }
+
+                ShowText(osdText, 5000, MediaInfoOsdFontSize(oh, lines));
+            }
             else
             {
                 MsgBoxEx.MessageBoxEx.MsgFontFamily = new FontFamily("Consolas");
@@ -71,6 +90,34 @@ namespace mpvnet
                 MsgBoxEx.MessageBoxEx.MsgFontFamily = new FontFamily("Segoe UI");
             }
         });
+
+        // Count logical lines + wrap of long filename/title lines.
+        public static int MediaInfoOsdLineEstimate(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return 1;
+
+            int lines = 0;
+            foreach (string part in text.Split('\n'))
+            {
+                int len = part.Length;
+                if (len <= 0)
+                    lines += 1;
+                else
+                    lines += (len + 89) / 90; // ~90 cols before wrap
+            }
+            return Math.Max(1, lines);
+        }
+
+        // Shrink until the block fits the window; line height ≈ 1.5×fs.
+        public static int MediaInfoOsdFontSize(int osdHeight, int lineCount)
+        {
+            if (lineCount < 1)
+                lineCount = 1;
+            if (osdHeight < 1)
+                osdHeight = 720;
+            return Math.Max(8, Math.Min(18, (int)((osdHeight - 64) / (lineCount * 1.5))));
+        }
 
         public static void ShowCommandPalette() => App.InvokeOnMainThread(() =>
         {

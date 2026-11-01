@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
@@ -367,6 +368,8 @@ namespace mpvnet
 
         public static void WindowScale(float value) => Core.RaiseWindowScaleNET(value);
 
+        static int ShowTextFontGen;
+
         public static void ShowText(string text, int duration = 0, int fontSize = 0)
         {
             if (string.IsNullOrEmpty(text))
@@ -375,11 +378,28 @@ namespace mpvnet
             if (duration == 0)
                 duration = Core.GetPropertyInt("osd-duration");
 
-            if (fontSize == 0)
-                fontSize = Core.GetPropertyInt("osd-font-size");
+            int prev = Core.GetPropertyInt("osd-font-size");
+            if (fontSize <= 0)
+                fontSize = prev;
 
-            Core.Command("show-text \"${osd-ass-cc/0}{\\\\fs" + fontSize +
-                "}${osd-ass-cc/1}" + text + "\" " + duration);
+            // show-text paints async; restoring osd-font-size immediately loses the size.
+            int gen = ++ShowTextFontGen;
+            if (fontSize != prev)
+                Core.SetPropertyInt("osd-font-size", fontSize);
+
+            Core.CommandV("show-text", text, duration.ToString());
+
+            if (fontSize != prev)
+            {
+                int wait = duration + 300;
+                App.RunTask(() =>
+                {
+                    Task.Delay(wait).Wait();
+                    if (gen != ShowTextFontGen)
+                        return;
+                    try { Core.SetPropertyInt("osd-font-size", prev); } catch { }
+                });
+            }
         }
 
         public static void ShowPlaylist() => App.InvokeOnMainThread(() =>

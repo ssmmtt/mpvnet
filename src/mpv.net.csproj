@@ -162,7 +162,6 @@
     <Compile Include="Features\HoldSpeedController.cs" />
     <Compile Include="Features\ResumeLastPlayback.cs" />
     <Compile Include="Features\SubtitleTrackUi.cs" />
-    <Compile Include="WinForms\TrackListMenuBuilder.cs" />
     <Compile Include="Util\Help.cs" />
     <Compile Include="Config\I18n.cs" />
     <Compile Include="Commands\GlobalHotkey.cs" />

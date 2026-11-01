@@ -407,9 +407,6 @@ namespace mpvnet
                         }
                     }
 
-                    // List every track under Audio / Subtitle (not just Cycle/Next).
-                    TrackListMenuBuilder.Fill(FindMenuItem("Audio"), audTracks, "aid", Core.AID, null);
-                    TrackListMenuBuilder.Fill(FindMenuItem("Subtitle"), subTracks, "sid", Core.SID, "No subtitles");
                 }
                 finally
                 {
