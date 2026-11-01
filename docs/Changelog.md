@@ -1,4 +1,8 @@
 
+# v6.1.0.0
+
+- libmpv shinchiro 2026-11-01 (mpv v0.41.0-1374)
+
 # v6.0.4.0 Stable (2023-08-17)
 
 - libmpv-2.dll support
