@@ -511,9 +511,9 @@ help = <N|inf|no> Loop a single file N times. inf means forever, no means normal
 
 name = save-position-on-quit
 file = mpv
-default = no
+default = yes
 filter = Playback
-help = Always save the current playback position on quit. When this file is played again later, the player will seek to the old playback position on start. This does not happen if playback of a file is stopped in any other way than quitting. For example, going to the next file in the playlist will not save the position, and start playback at beginning the next time the file is played.\n\nThis behavior is disabled by default, but is always available when quitting the player with Shift+Q.
+help = Always save the current playback position on quit. When this file is played again later, the player will seek to the old playback position on start. This does not happen if playback of a file is stopped in any other way than quitting. For example, going to the next file in the playlist will not save the position, and start playback at beginning the next time the file is played.\n\nEnabled by default in mpv.net. Quitting with Shift+Q always saves the position even when this option is no.
 option = yes
 option = no
 

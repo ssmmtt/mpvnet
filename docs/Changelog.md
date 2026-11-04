@@ -1,6 +1,7 @@
 
 # v6.1.0.0
 
+- save-position-on-quit defaults to yes; watch-later also restores start position (resume-last continues from last progress)
 - libmpv shinchiro 2026-11-01 (mpv v0.41.0-1374)
 
 # v6.0.4.0 Stable (2023-08-17)

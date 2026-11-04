@@ -143,8 +143,9 @@ namespace mpvnet
             SetPropertyBool("input-default-bindings", true);
             SetPropertyBool("input-builtin-bindings", false);
 
-            // Per-file resume: audio/subtitle only. Volume/mute are global (remember-volume).
-            SetPropertyString("watch-later-options", "aid,sid");
+            // Per-file resume: position + audio/subtitle. Volume/mute are global (remember-volume).
+            SetPropertyString("save-position-on-quit", "yes");
+            SetPropertyString("watch-later-options", "start,aid,sid");
             SetPropertyString("screenshot-directory", "~~desktop/");
             SetPropertyString("osd-playing-msg", "${media-title}");
             SetPropertyString("osc", "yes");
